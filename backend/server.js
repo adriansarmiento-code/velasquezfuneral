@@ -1,4 +1,4 @@
-// 1. DNS FIX - MUST BE AT THE VERY TOP
+// 1. DNS FIX - MUST BE AT THE VERY TOP TO WORK
 const dns = require("node:dns/promises");
 dns.setServers(["8.8.8.8", "1.1.1.1"]); 
 
@@ -18,23 +18,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Database connection
-// Note: Using the SRV string (mongodb+srv://) in your .env is now safe with the DNS fix above
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('✅ MongoDB connected successfully!'))
-  .catch(err => {
-    console.log('❌ MongoDB connection error:');
-    // This will tell us if it's still a DNS issue or an IP Whitelist issue
-    if (err.message.includes('ECONNREFUSED')) {
-      console.error('👉 Status: DNS still failing or Port 27017 blocked.');
-    } else if (err.message.includes('MongooseServerSelectionError')) {
-      console.error('👉 Status: Connection reached Atlas, but your IP is likely not whitelisted.');
-    }
-    console.error(err);
-  });
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch(err => console.log('❌ MongoDB connection error:', err));
 
 // Routes
+app.use('/api/admin', require('./routes/admin'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/blogs', require('./routes/blogs'));
+app.use('/api/packages', require('./routes/packages'));
+app.use('/api/addons', require('./routes/addons'));
 
 // Health check route
 app.get('/health', (req, res) => {
@@ -47,11 +40,25 @@ app.get('/', (req, res) => {
     message: 'Velasquez Funeral & Chapel API',
     version: '1.0.0',
     endpoints: {
+      admin: '/api/admin',
       contact: '/api/contact',
       blogs: '/api/blogs',
+      packages: '/api/packages',
+      addons: '/api/addons',
       health: '/health'
     }
   });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Something went wrong!' });
 });
 
 const PORT = process.env.PORT || 5000;
