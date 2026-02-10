@@ -18,6 +18,11 @@ const routes = [
     component: () => import('../views/Blogs.vue')
   },
   {
+    path: '/blog/:slug',  // NEW - Individual blog detail page
+    name: 'BlogDetail',
+    component: () => import('../views/BlogDetail.vue')
+  },
+  {
     path: '/add-ons',
     name: 'AddOns',
     component: () => import('../views/AddOns.vue')
@@ -76,7 +81,14 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  }
 })
 
 // Auth guard

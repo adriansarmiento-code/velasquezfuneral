@@ -54,6 +54,7 @@
 
 <script>
 import AdminSidebar from '@/components/admin/Sidebar.vue'
+import api from '@/services/api'
 
 export default {
   name: 'AdminDashboardPage',
@@ -70,7 +71,33 @@ export default {
       }
     }
   },
+  mounted() {
+    this.loadStats()
+  },
   methods: {
+    async loadStats() {
+      try {
+        // Load contacts count
+        const contactsRes = await api.getAllContactsAdmin()
+        this.stats.contacts = contactsRes.data.data.length
+
+        // Load blogs count
+        const blogsRes = await api.getAllBlogsAdmin()
+        this.stats.blogs = blogsRes.data.data.filter(b => b.published).length
+
+        // Load packages count
+        const packagesRes = await api.getAllPackagesAdmin()
+        this.stats.packages = packagesRes.data.data.filter(p => p.published).length
+
+        // Load add-ons count
+        const addonsRes = await api.getAllAddOnsAdmin()
+        this.stats.addons = addonsRes.data.data.filter(a => a.published).length
+
+      } catch (error) {
+        console.error('Error loading stats:', error)
+      }
+    },
+
     logout() {
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminUser');

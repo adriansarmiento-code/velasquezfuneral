@@ -75,10 +75,23 @@
               <textarea v-model="blogForm.content" rows="10" required></textarea>
             </div>
 
-            <div class="form-group">
-              <label>Image URL</label>
-              <input v-model="blogForm.image" type="text" placeholder="https://..." />
+                    <div class="form-group">
+          <label>Image</label>
+          <div class="image-upload-section">
+            <input 
+              v-if="!blogForm.image" 
+              type="file" 
+              @change="handleImageUpload" 
+              accept="image/*"
+              ref="imageInput"
+            />
+            <div v-else class="image-preview">
+              <img :src="blogForm.image" alt="Preview" />
+              <button type="button" @click="removeImage" class="btn btn-sm btn-danger">Remove</button>
             </div>
+          </div>
+          <small v-if="uploading">Uploading image...</small>
+        </div>
 
             <div class="form-group">
               <label class="checkbox-label">
@@ -114,6 +127,7 @@ export default {
       blogs: [],
       loading: false,
       saving: false,
+      uploading: false, // NEW
       showCreateModal: false,
       showEditModal: false,
       blogForm: this.getEmptyForm(),
@@ -133,6 +147,47 @@ export default {
         image: '',
         category: '',
         published: false
+      }
+    },
+    
+    // NEW: Handle image upload
+    async handleImageUpload(event) {
+      const file = event.target.files[0]
+      if (!file) return
+
+      this.uploading = true
+      try {
+        const formData = new FormData()
+        formData.append('image', file)
+
+        const token = localStorage.getItem('adminToken')
+        const response = await fetch('http://localhost:5000/api/upload/image', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        })
+
+        const data = await response.json()
+        if (data.success) {
+          this.blogForm.image = data.url
+        } else {
+          alert('Upload failed: ' + data.message)
+        }
+      } catch (error) {
+        console.error('Upload error:', error)
+        alert('Failed to upload image')
+      } finally {
+        this.uploading = false
+      }
+    },
+
+    // NEW: Remove uploaded image
+    removeImage() {
+      this.blogForm.image = ''
+      if (this.$refs.imageInput) {
+        this.$refs.imageInput.value = ''
       }
     },
     
@@ -227,6 +282,20 @@ export default {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   overflow-x: auto;
+}
+.image-upload-section {
+  margin-top: 0.5rem;
+}
+
+.image-preview {
+  position: relative;
+  max-width: 400px;
+}
+
+.image-preview img {
+  width: 100%;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
 }
 
 table {

@@ -28,6 +28,7 @@ app.use('/api/contact', require('./routes/contact'));
 app.use('/api/blogs', require('./routes/blogs'));
 app.use('/api/packages', require('./routes/packages'));
 app.use('/api/addons', require('./routes/addons'));
+app.use('/api/upload', require('./routes/upload')); // NEW upload route
 
 // Health check route
 app.get('/health', (req, res) => {

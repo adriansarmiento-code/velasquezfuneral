@@ -26,6 +26,10 @@ export default {
     return axios.post(`${API_URL}/contact`, data);
   },
 
+  getAllContactsAdmin() {
+    return apiClient.get(`${API_URL}/contact`);
+  },
+
   // Admin Auth
   adminLogin(credentials) {
     return axios.post(`${API_URL}/admin/login`, credentials);
