@@ -5,22 +5,27 @@ const AddOnSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  description: String,
-  image: String,
-  icon: String,
-  link: String,
-  order: {
+  description: {
+    type: String,
+    required: true
+  },
+  icon: {
+    type: String // Emoji or text icon
+  },
+  image: {
+    type: String // Image URL
+  },
+  link: {
+    type: String // Optional external link
+  },
+  displayOrder: {
     type: Number,
     default: 0
   },
   published: {
     type: Boolean,
     default: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
   }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('AddOn', AddOnSchema);

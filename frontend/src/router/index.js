@@ -62,7 +62,7 @@ const routes = [
   {
     path: '/admin/packages',
     name: 'AdminPackages',
-    component: () => import('../views/admin/Packages.vue'),
+    component: () => import('../views/admin/PackagesCaskets.vue'),
     meta: { requiresAuth: true }
   },
   {
@@ -76,7 +76,12 @@ const routes = [
     name: 'AdminContacts',
     component: () => import('../views/admin/Contacts.vue'),
     meta: { requiresAuth: true }
-  }
+  },
+  {
+  path: '/packages/:packageId/caskets',
+  name: 'PackageCaskets',
+  component: () => import('../views/PackageCaskets.vue')
+},
 ]
 
 const router = createRouter({

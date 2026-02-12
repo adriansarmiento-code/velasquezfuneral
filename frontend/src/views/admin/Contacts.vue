@@ -68,7 +68,7 @@ export default {
         this.contacts = response.data.data
       } catch (error) {
         console.error('Error loading contacts:', error)
-        alert('Failed to load contacts')
+        this.$toast.error('Failed to load contacts')
       } finally {
         this.loading = false
       }

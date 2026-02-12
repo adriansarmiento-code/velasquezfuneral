@@ -34,6 +34,10 @@ export default {
   adminLogin(credentials) {
     return axios.post(`${API_URL}/admin/login`, credentials);
   },
+  // Admin password change
+changePassword(data) {
+  return apiClient.post(`${API_URL}/admin/change-password`, data);
+},
   
   verifyAdmin() {
     return apiClient.get(`${API_URL}/admin/verify`);
@@ -109,5 +113,33 @@ export default {
 
   deleteAddOn(id) {
     return apiClient.delete(`${API_URL}/addons/admin/delete/${id}`);
-  }
+  },
+
+
+// Caskets (Public)
+getCasketsByPackage(packageId) {
+  return axios.get(`${API_URL}/caskets/package/${packageId}`);
+},
+
+// Caskets (Admin)
+getAllCasketsAdmin() {
+  return apiClient.get(`${API_URL}/caskets/admin/all`);
+},
+
+getCasketsByPackageAdmin(packageId) {
+  return apiClient.get(`${API_URL}/caskets/admin/package/${packageId}`);
+},
+
+createCasket(data) {
+  return apiClient.post(`${API_URL}/caskets/admin/create`, data);
+},
+
+updateCasket(id, data) {
+  return apiClient.put(`${API_URL}/caskets/admin/update/${id}`, data);
+},
+
+deleteCasket(id) {
+  return apiClient.delete(`${API_URL}/caskets/admin/delete/${id}`);
+},
+  
 };

@@ -5,39 +5,35 @@ const AdminSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true,
-    trim: true
+    unique: true
   },
   email: {
     type: String,
     required: true,
-    unique: true,
-    trim: true,
-    lowercase: true
+    unique: true
   },
   password: {
     type: String,
     required: true
-  },
-  role: {
-    type: String,
-    enum: ['admin', 'superadmin'],
-    default: 'admin'
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
+  }
+}, { timestamps: true });
+
+// Hash password before saving - FIXED VERSION
+AdminSchema.pre('save', async function() {
+  // Only hash if password is new or modified
+  if (!this.isModified('password')) {
+    return; // Just return, don't call next()
+  }
+  
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  } catch (error) {
+    throw error; // Throw error instead of passing to next()
   }
 });
 
-// Hash password before saving
-AdminSchema.pre('save', async function() {
-  if (!this.isModified('password')) return;
-  
-  this.password = await bcrypt.hash(this.password, 10);
-});
-
-// Compare password method
+// Method to compare password
 AdminSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };

@@ -11,7 +11,13 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:8080',
+  origin: [
+    'http://localhost:8080',
+    'https://velasquezfuneral.com',
+    'http://velasquezfuneral.com',
+    'https://www.velasquezfuneral.com',
+    'http://www.velasquezfuneral.com'
+  ],
   credentials: true
 }));
 app.use(express.json());
@@ -28,7 +34,8 @@ app.use('/api/contact', require('./routes/contact'));
 app.use('/api/blogs', require('./routes/blogs'));
 app.use('/api/packages', require('./routes/packages'));
 app.use('/api/addons', require('./routes/addons'));
-app.use('/api/upload', require('./routes/upload')); // NEW upload route
+app.use('/api/upload', require('./routes/upload'));
+app.use('/api/caskets', require('./routes/caskets')); // NEW
 
 // Health check route
 app.get('/health', (req, res) => {

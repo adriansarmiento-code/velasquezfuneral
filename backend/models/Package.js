@@ -5,21 +5,33 @@ const PackageSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  tagline: String,
-  description: String,
-  features: [String],
-  order: {
+  category: {
+    type: String,
+    required: true,
+    enum: ['Basic', 'Semi-Elegant', 'Elegant']
+  },
+  tagline: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  image: {
+    type: String // Package category image
+  },
+  features: [{
+    type: String
+  }],
+  displayOrder: {
     type: Number,
     default: 0
   },
   published: {
     type: Boolean,
     default: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
   }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Package', PackageSchema);

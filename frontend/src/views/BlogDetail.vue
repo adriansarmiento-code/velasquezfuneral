@@ -28,38 +28,42 @@
       </header>
 
       <!-- Blog Image -->
-      <div v-if="blog.image" class="blog-image-container">
+      <div class="blog-image-container">
         <div class="container">
-          <img :src="blog.image" :alt="blog.title" class="blog-image">
+          <img v-if="blog.image" :src="getImageUrl(blog.image)" :alt="blog.title" class="blog-image">
+          <div v-else class="blog-image-placeholder">📝</div>
         </div>
       </div>
 
       <!-- Blog Content -->
       <section class="blog-content-section">
         <div class="container">
-          <div class="blog-content" v-html="formatContent(blog.content)"></div>
-
-          <!-- Share/Back Section -->
-          <div class="blog-actions">
-            <router-link to="/blogs" class="btn btn-secondary">← Back to All Blogs</router-link>
-            <router-link to="/contact" class="btn btn-primary">Contact Us</router-link>
-          </div>
+          <div class="blog-content" v-html="blog.content"></div>
         </div>
       </section>
 
-      <!-- Related CTA -->
       <section class="cta-section">
         <div class="container">
           <div class="cta-content">
-            <h2>Need Assistance?</h2>
-            <p>Our compassionate team is here to help you through every step. Contact us anytime for support and guidance.</p>
+            <h2>We're Here to Help 24/7</h2>
+            <p>
+              At Velasquez Funeral & Chapel, our compassionate team is available around the clock to guide you through every step of the <strong>funeral planning</strong> process. 
+              As <strong>Cabiao's trusted funeral service provider since 1970</strong>, we offer <strong>affordable funeral packages</strong>, 
+              <strong>professional embalming services</strong>, <strong>burial coordination services</strong>, and <strong>chapel venue for wake</strong> services. 
+              We're honored to serve families in <strong>Cabiao, Nueva Ecija</strong> during their most difficult times.
+            </p>
             <div class="cta-buttons">
-              <router-link to="/contact" class="btn btn-primary">Get In Touch</router-link>
-              <router-link to="/packages" class="btn btn-outline">View Our Services</router-link>
+              <router-link to="/contact" class="btn btn-secondary">Contact Us Anytime</router-link>
             </div>
           </div>
         </div>
       </section>
+
+      <div class="back-to-blogs-container">
+        <div class="container">
+          <router-link to="/blogs" class="btn btn-outline">← Back to All Blogs</router-link>
+        </div>
+      </div>
     </article>
 
     <Footer />
@@ -108,14 +112,24 @@ export default {
         this.loading = false
       }
     },
+    getImageUrl(url) {
+      if (!url) return ''
+      if (/^https?:\/\//i.test(url)) return url
+      if (/^\/\//.test(url)) return window.location.protocol + url
+      const base = process.env.VUE_APP_API_URL || 'http://localhost:5000'
+      return base.replace(/\/api\/?$/, '') + url
+    },
 
     formatDate(date) {
       const options = { year: 'numeric', month: 'long', day: 'numeric' }
       return new Date(date).toLocaleDateString('en-US', options)
     },
 
-    formatContent(content) {
-      // Convert line breaks to paragraphs
+    renderContent(content) {
+      if (!content) return ''
+      // if content already contains HTML tags, assume it's rich HTML
+      if (/</.test(content) && />/.test(content)) return content
+      // otherwise convert simple plaintext line breaks to paragraphs
       return content
         .split('\n\n')
         .map(paragraph => `<p>${paragraph.replace(/\n/g, '<br>')}</p>`)
@@ -139,6 +153,19 @@ export default {
 .blog-header {
   background: #f8f8f8;
   padding: 4rem 0 3rem;
+}
+
+.blog-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.blog-header .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .blog-meta {
@@ -169,7 +196,7 @@ export default {
 
 .blog-excerpt {
   font-size: 1.25rem;
-  color: #666;
+  color: #0a0a0a;
   line-height: 1.6;
   margin: 0;
 }
@@ -181,12 +208,26 @@ export default {
 
 .blog-image {
   width: 100%;
-  max-width: 900px;
+  max-width: 860px;
   height: auto;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
   display: block;
-  margin: 0 auto;
+  margin: 1.5rem auto;
+}
+
+.blog-image-placeholder {
+  width: 100%;
+  max-width: 860px;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  background: #f5f5f5;
+  color: #999;
+  border-radius: 8px;
+  margin: 1.5rem auto;
 }
 
 .blog-content-section {
@@ -195,11 +236,11 @@ export default {
 }
 
 .blog-content {
-  max-width: 800px;
+  max-width: 820px;
   margin: 0 auto;
-  font-size: 1.1rem;
+  font-size: 1.12rem;
   line-height: 1.8;
-  color: #333;
+  color: #0a0a0a;
 }
 
 .blog-content >>> p {
@@ -215,29 +256,39 @@ export default {
 .blog-content >>> h3 {
   margin-top: 2rem;
   margin-bottom: 0.75rem;
-  color: #1a1a1a;
+  color: #0a0a0a;
 }
 
-.blog-content >>> ul,
-.blog-content >>> ol {
-  margin-bottom: 1.5rem;
-  padding-left: 2rem;
-}
 
 .blog-content >>> li {
   margin-bottom: 0.5rem;
 }
 
-.blog-actions {
-  max-width: 800px;
-  margin: 3rem auto 0;
-  padding-top: 3rem;
-  border-top: 1px solid #eee;
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+/* Remove or replace the .blog-actions styles with these */
+
+.back-to-blogs-container {
+  text-align: center;
+  margin: 3rem 0 5rem; /* Adds space above and below the button */
 }
 
+/* Ensure the CTA button is prominent */
+.cta-buttons {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* Make sure strong tags in the CTA are visible */
+.cta-content p strong {
+  color: var(--soft-cream, #FAF8F3);
+  font-weight: 700;
+}
+
+/* Adjust CTA padding to match the elegant design */
+.cta-section {
+  padding: 5rem 0;
+  background: #d4af35; /* Matches --rich-black */
+}
 @media (max-width: 768px) {
   .blog-title {
     font-size: 2rem;
