@@ -13,10 +13,8 @@ const app = express();
 app.use(cors({
   origin: [
     'http://localhost:8080',
-    'https://velasquezfuneral.com',
-    'http://velasquezfuneral.com',
-    'https://www.velasquezfuneral.com',
-    'http://www.velasquezfuneral.com'
+    'https://velasquezfuneral.com', // MUST match your official site
+    'https://www.velasquezfuneral.com'
   ],
   credentials: true
 }));
@@ -38,8 +36,17 @@ app.use('/api/upload', require('./routes/upload'));
 app.use('/api/caskets', require('./routes/caskets')); // NEW
 
 // Health check route
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Velasquez Funeral API is running' });
+});
+
+// Update the base /api route for metadata
+app.get('/api', (req, res) => {
+  res.json({ 
+    message: 'Velasquez Funeral & Chapel API',
+    version: '1.0.0',
+    status: 'connected'
+  });
 });
 
 // Basic route
