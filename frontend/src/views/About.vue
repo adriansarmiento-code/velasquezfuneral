@@ -166,12 +166,22 @@
 <script>
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
+import seoMeta from '@/mixins/seoMeta'
 
 export default {
   name: 'AboutPage',
+  mixins: [seoMeta],
   components: {
     Navbar,
     Footer
+  },
+  data() {
+    return {
+      seoTitle: 'About Us - 50+ Years Serving Cabiao Families',
+      seoDescription: 'Learn about Velasquez Funeral and Chapel, Cabiao\'s longest-standing funeral service provider since 1970. Owned by Mario F. Velasquez Jr., managed by Michael C. Soriano. We\'re the only funeral home in Cabiao with dedicated chapel facilities.',
+      seoKeywords: 'Velasquez Funeral Chapel, funeral home Cabiao history, Mario Velasquez funeral, longest funeral service Cabiao, chapel facility Nueva Ecija, funeral service experience',
+      seoImage: 'https://velasquezfuneral.com/images/velasquez-about.jpg'
+    }
   },
   mounted() {
     this.initScrollAnimations()

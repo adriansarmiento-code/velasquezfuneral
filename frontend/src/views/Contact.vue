@@ -208,9 +208,11 @@
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import api from '@/services/api'
+import seoMeta from '@/mixins/seoMeta'
 
 export default {
   name: 'ContactPage',
+  mixins: [seoMeta],
   components: {
     Navbar,
     Footer
@@ -225,7 +227,11 @@ export default {
       },
       submitting: false,
       successMessage: '',
-      errorMessage: ''
+      errorMessage: '',
+      seoTitle: 'Contact Us - 24/7 Funeral Services in Cabiao',
+      seoDescription: 'Contact Velasquez Funeral and Chapel anytime. Call 0920 660 9999 or 0915 098 0496. Located at Jose Abad Santos Ave, Cabiao, Nueva Ecija. We\'re available 24 hours a day, 7 days a week for immediate assistance.',
+      seoKeywords: 'contact funeral home Cabiao, 24/7 funeral services, emergency funeral Cabiao, funeral hotline Nueva Ecija, Velasquez Funeral contact, funeral consultation Cabiao',
+      seoImage: 'https://velasquezfuneral.com/images/velasquez-contact.jpg'
     }
   },
   mounted() {

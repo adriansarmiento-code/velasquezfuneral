@@ -1,63 +1,154 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
-    <style>
-  /* Prevent content jump on page load */
-  .scroll-reveal {
-    opacity: 0;
-    transform: translateY(50px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T19G4G1SR3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-T19G4G1SR3');
+  </script>
 
-  .scroll-reveal.revealed {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  <!-- Scroll Reveal & Loading Animation Styles -->
+  <style>
+    /* Prevent content jump on page load */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
 
-  /* Loading animation */
-  .page-loading {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #0a0a0a;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.5s ease;
-  }
+    .scroll-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-  .page-loading.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
+    /* Loading animation */
+    .page-loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0a0a0a;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease;
+    }
 
-  .loader {
-    width: 50px;
-    height: 50px;
-    border: 3px solid rgba(212,175,55,0.3);
-    border-top-color: #d4af37;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
+    .page-loading.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(212,175,55,0.3);
+      border-top-color: #d4af37;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+  <!-- Primary Meta Tags -->
+  <title>Velasquez Funeral and Chapel | Compassionate Funeral Services in Cabiao, Nueva Ecija Since 1970</title>
+  <meta name="title" content="Velasquez Funeral and Chapel | Compassionate Funeral Services in Cabiao, Nueva Ecija">
+  <meta name="description" content="Velasquez Funeral and Chapel has been serving Cabiao, Nueva Ecija with dignified funeral services since 1970. We offer complete funeral packages, chapel services, and flexible payment plans. Available 24/7.">
+  <meta name="keywords" content="funeral services Cabiao, funeral home Nueva Ecija, chapel services Cabiao, funeral packages Philippines, affordable funeral Cabiao, burial services Nueva Ecija, Velasquez Funeral, cremation services, memorial services, funeral planning">
+  <meta name="author" content="Velasquez Funeral and Chapel">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  <meta name="revisit-after" content="7 days">
+
+  <!-- Geographic Meta Tags -->
+  <meta name="geo.region" content="PH-NUE">
+  <meta name="geo.placename" content="Cabiao, Nueva Ecija">
+  <meta name="geo.position" content="15.2544;120.8602">
+  <meta name="ICBM" content="15.2544, 120.8602">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://velasquezfuneral.com/">
+  <meta property="og:title" content="Velasquez Funeral and Chapel | Serving Cabiao Since 1970">
+  <meta property="og:description" content="Compassionate funeral services in Cabiao, Nueva Ecija. Complete packages, chapel services, and flexible payment plans. Available 24/7 since 1970.">
+  <meta property="og:image" content="https://velasquezfuneral.com/images/velasquez-funeral-og.jpg">
+  <meta property="og:locale" content="en_PH">
+  <meta property="og:site_name" content="Velasquez Funeral and Chapel">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://velasquezfuneral.com/">
+  <meta name="twitter:title" content="Velasquez Funeral and Chapel | Compassionate Funeral Services">
+  <meta name="twitter:description" content="Serving Cabiao, Nueva Ecija with dignified funeral services since 1970. Available 24/7.">
+  <meta name="twitter:image" content="https://velasquezfuneral.com/images/velasquez-funeral-og.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" href="<%= BASE_URL %>Velasquez.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="<%= BASE_URL %>apple-touch-icon.png">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://velasquezfuneral.com/">
+
+  <!-- Preconnect to external resources for faster loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://velasquez-funeral-api.onrender.com">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Cinzel:wght@400;500;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Structured Data / Schema.org for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FuneralHome",
+    "name": "Velasquez Funeral and Chapel",
+    "image": "https://velasquezfuneral.com/images/velasquez-funeral-logo.jpg",
+    "description": "Compassionate funeral services in Cabiao, Nueva Ecija since 1970. Complete funeral packages, chapel services, and flexible payment plans.",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "7V36+M7C, Jose Abad Santos Ave",
+      "addressLocality": "Cabiao",
+      "addressRegion": "Nueva Ecija",
+      "addressCountry": "PH"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 15.2544,
+      "longitude": 120.8602
+    },
+    "url": "https://velasquezfuneral.com",
+    "telephone": ["+639206609999", "+639150980496"],
+    "openingHours": "Mo,Tu,We,Th,Fr,Sa,Su 00:00-23:59",
+    "priceRange": "$$",
+    "areaServed": {
+      "@type": "City",
+      "name": "Cabiao, Nueva Ecija"
+    },
+    "foundingDate": "1970",
+    "sameAs": [
+      "https://www.facebook.com/people/Velasquez-Funeral-and-Chapel/100066363175090/"
+    ]
   }
-</style>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>Velasquez.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+  </script>
+</head>
+<body>
+  <noscript>
+    <strong>We're sorry but Velasquez Funeral and Chapel website doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
 </html>

@@ -169,9 +169,11 @@
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import api from '@/services/api'
+import seoMeta from '@/mixins/seoMeta'
 
 export default {
   name: 'AddOnsPage',
+  mixins: [seoMeta],
   components: {
     Navbar,
     Footer
@@ -179,7 +181,11 @@ export default {
   data() {
     return {
       addons: [],
-      loading: false
+      loading: false,
+      seoTitle: 'Additional Funeral Services - Personalize Your Tribute',
+      seoDescription: 'Enhance your funeral service with memorial videos, professional photography, floral arrangements, custom programs, and more. Create a personalized tribute that celebrates your loved one\'s unique life.',
+      seoKeywords: 'memorial video presentation, funeral photography, floral arrangements funeral, memorial programs, personalized funeral services, custom funeral Cabiao',
+      seoImage: 'https://velasquezfuneral.com/images/funeral-addons.jpg'
     }
   },
   mounted() {

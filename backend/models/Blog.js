@@ -18,16 +18,17 @@ const BlogSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  image: String,
-  category: String,
+  image: {
+    type: String
+  },
+  publishedBy: {
+    type: String,
+    default: 'Velasquez Funeral and Chapel'
+  },
   published: {
     type: Boolean,
-    default: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
+    default: false
   }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Blog', BlogSchema);

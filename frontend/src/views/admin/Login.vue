@@ -36,9 +36,6 @@
         </button>
       </form>
 
-      <p class="login-help">
-        <small>Default credentials: admin / admin123</small>
-      </p>
     </div>
   </div>
 </template>

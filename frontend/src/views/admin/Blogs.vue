@@ -16,7 +16,7 @@
             <tr>
               <th>Title</th>
               <th>Slug</th>
-              <th>Category</th>
+              <th>Published By</th>
               <th>Status</th>
               <th>Created</th>
               <th>Actions</th>
@@ -26,7 +26,7 @@
             <tr v-for="blog in blogs" :key="blog._id">
               <td>{{ blog.title }}</td>
               <td>{{ blog.slug }}</td>
-              <td>{{ blog.category || 'N/A' }}</td>
+              <td>{{ blog.publishedBy || 'Velasquez Funeral and Chapel' }}</td>
               <td>
                 <span :class="['status-badge', blog.published ? 'status-published' : 'status-draft']">
                   {{ blog.published ? 'Published' : 'Draft' }}
@@ -72,15 +72,13 @@
 
               <div class="form-row">
                 <div class="form-group">
-                  <label>Category</label>
-                  <select v-model="blogForm.category">
-                    <option value="">Select a category</option>
-                    <option value="Guidance">Guidance</option>
-                    <option value="Planning">Planning</option>
-                    <option value="Services">Services</option>
-                    <option value="Grief Support">Grief Support</option>
-                    <option value="Traditions">Traditions</option>
-                  </select>
+                  <label>Published By</label>
+                  <input 
+                    v-model="blogForm.publishedBy" 
+                    type="text" 
+                    placeholder="e.g., Velasquez Funeral and Chapel, Admin, Staff Name"
+                  />
+                  <small>Who is publishing this article? (Default: Velasquez Funeral and Chapel)</small>
                 </div>
 
                 <div class="form-group">
@@ -257,17 +255,17 @@ export default {
     this.loadBlogs()
   },
   methods: {
-    getEmptyForm() {
-      return {
-        title: '',
-        slug: '',
-        excerpt: '',
-        content: '',
-        image: '',
-        category: '',
-        published: false
-      }
-    },
+getEmptyForm() {
+  return {
+    title: '',
+    slug: '',
+    excerpt: '',
+    content: '',
+    image: '',
+    publishedBy: 'Velasquez Funeral and Chapel',
+    published: false
+  }
+},
     
     // Handle featured image upload
     async handleImageUpload(event) {

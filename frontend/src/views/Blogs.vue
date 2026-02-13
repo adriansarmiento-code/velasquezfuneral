@@ -17,9 +17,9 @@
           <article v-for="blog in blogs" :key="blog._id" class="addon-card">
             <div class="addon-image-container">
               <img v-if="blog.image" :src="blog.image" :alt="blog.title">
-              <div v-else class="addon-placeholder">📝</div>
+              <div v-else class="addon-placeholder"></div>
               <div class="addon-overlay">
-                <span class="addon-icon">📝</span>
+                <span class="addon-icon"></span>
               </div>
             </div>
             <div class="addon-content">
@@ -37,7 +37,7 @@
         </div>
       </div>
     </section>
-
+ 
     <Footer />
   </div>
 </template>
@@ -46,9 +46,11 @@
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import api from '@/services/api'
+import seoMeta from '@/mixins/seoMeta'
 
 export default {
   name: 'BlogsPage',
+  mixins: [seoMeta],
   components: {
     Navbar,
     Footer
@@ -56,7 +58,11 @@ export default {
   data() {
     return {
       blogs: [],
-      loading: false
+      loading: false,
+      seoTitle: 'Funeral Planning Guides & Resources',
+      seoDescription: 'Helpful articles and guides about funeral planning, etiquette, burial services, and grief support. Learn about immediate steps after loss, funeral costs, memorial services, and more from Velasquez Funeral and Chapel.',
+      seoKeywords: 'funeral planning guide, funeral etiquette Philippines, burial planning, grief support, memorial service ideas, funeral costs Cabiao, advance funeral planning',
+      seoImage: 'https://velasquezfuneral.com/images/funeral-blog.jpg'
     }
   },
   mounted() {

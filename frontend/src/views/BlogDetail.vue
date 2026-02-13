@@ -19,7 +19,7 @@
       <header class="blog-header">
         <div class="container">
           <div class="blog-meta">
-            <span v-if="blog.category" class="blog-category">{{ blog.category }}</span>
+            <span class="blog-author">Published by: {{ blog.publishedBy || 'Velasquez Funeral and Chapel' }}</span>
             <span class="blog-date">{{ formatDate(blog.createdAt) }}</span>
           </div>
           <h1 class="blog-title">{{ blog.title }}</h1>
@@ -74,9 +74,11 @@
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import api from '@/services/api'
+import seoMeta from '@/mixins/seoMeta'
 
 export default {
   name: 'BlogDetailPage',
+  mixins: [seoMeta],
   components: {
     Navbar,
     Footer
@@ -85,9 +87,23 @@ export default {
     return {
       blog: null,
       loading: false,
-      error: null
+      error: null,
+      seoTitle: '',
+      seoDescription: '',
+      seoKeywords: '',
+      seoImage: ''
     }
   },
+    watch: {
+      blog(newBlog) {
+        if (newBlog) {
+          this.seoTitle = newBlog.title
+          this.seoDescription = newBlog.excerpt
+          this.seoKeywords = `${newBlog.title}, funeral planning, funeral services, Cabiao Nueva Ecija, ${newBlog.publishedBy || 'Velasquez Funeral'}`
+          this.seoImage = newBlog.image || 'https://velasquezfuneral.com/images/funeral-blog.jpg'
+        }
+      }
+    },
   mounted() {
     this.loadBlog()
   },
@@ -175,12 +191,11 @@ export default {
   font-size: 0.9rem;
 }
 
-.blog-category {
-  background: #d4af37;
-  color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
+.blog-author {
+  color: var(--primary-gold);
   font-weight: 600;
+  font-size: 0.95rem;
+  font-style: italic;
 }
 
 .blog-date {

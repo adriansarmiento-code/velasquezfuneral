@@ -169,9 +169,11 @@
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import api from '@/services/api'
+import seoMeta from '@/mixins/seoMeta'
 
 export default {
   name: 'PackagesPage',
+  mixins: [seoMeta],
   components: {
     Navbar,
     Footer
@@ -181,10 +183,13 @@ export default {
       packages: [],
       currentCaskets: [],
       loading: false,
-      loadingCaskets: false,
-      expandedPackage: null
+      seoTitle: 'Funeral Service Packages - Basic, Semi-Elegant & Elegant Options',
+      seoDescription: 'Affordable funeral service packages in Cabiao, Nueva Ecija. Choose from Basic, Semi-Elegant, or Elegant packages with flexible payment plans starting at 30% down payment. Professional embalming, casket selection, chapel services, and complete burial coordination.',
+      seoKeywords: 'funeral packages Cabiao, affordable funeral services Nueva Ecija, funeral payment plans, basic funeral package, elegant funeral service, casket selection Philippines, funeral installment payment',
+      seoImage: 'https://velasquezfuneral.com/images/funeral-packages.jpg'
     }
   },
+
   mounted() {
     console.log('Packages page mounted')
     this.loadPackages()

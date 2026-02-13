@@ -169,12 +169,22 @@
 <script>
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
+import seoMeta from '@/mixins/seoMeta'
 
 export default {
   name: 'HomePage',
+  mixins: [seoMeta],
   components: {
     Navbar,
     Footer
+  },
+  data() {
+    return {
+      seoTitle: 'Home - Compassionate Funeral Services in Cabiao Since 1970',
+      seoDescription: 'Velasquez Funeral and Chapel has served Cabiao, Nueva Ecija with dignity and compassion since 1970. We offer complete funeral packages, chapel services, burial coordination, and flexible payment plans. Available 24/7.',
+      seoKeywords: 'funeral services Cabiao, funeral home Nueva Ecija, burial services Cabiao, chapel funeral services, affordable funeral packages Philippines, cremation services Cabiao, funeral planning Nueva Ecija',
+      seoImage: 'https://velasquezfuneral.com/images/velasquez-funeral-home.jpg'
+    }
   },
   mounted() {
     this.initScrollAnimations()
