@@ -188,6 +188,7 @@ export default {
   },
   mounted() {
     this.initScrollAnimations()
+    this.addStructuredData()
   },
   methods: {
     initScrollAnimations() {
@@ -206,6 +207,39 @@ export default {
       
       window.addEventListener('scroll', revealOnScroll)
       revealOnScroll() // Initial check
+    },
+     addStructuredData() {
+      const script = document.createElement('script')
+      script.type = 'application/ld+json'
+      script.text = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FuneralHome",
+        "name": "Velasquez Funeral and Chapel",
+        "image": "https://velasquezfuneral.com/images/velasquez-funeral-logo.jpg",
+        "description": "Compassionate funeral services in Cabiao, Nueva Ecija since 1970. Complete funeral packages, chapel services, and flexible payment plans.",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "7V36+M7C, Jose Abad Santos Ave",
+          "addressLocality": "Cabiao",
+          "addressRegion": "Nueva Ecija",
+          "addressCountry": "PH"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 15.2544,
+          "longitude": 120.8602
+        },
+        "url": "https://velasquezfuneral.com",
+        "telephone": ["+639206609999", "+639150980496"],
+        "openingHours": "Mo,Tu,We,Th,Fr,Sa,Su 00:00-23:59",
+        "priceRange": "$$",
+        "areaServed": {
+          "@type": "City",
+          "name": "Cabiao, Nueva Ecija"
+        },
+        "foundingDate": "1970"
+      })
+      document.head.appendChild(script)
     },
 
     handleImageError(e) {

@@ -18,9 +18,9 @@
           <article v-for="addon in addons" :key="addon._id" class="addon-card">
             <div class="addon-image-container">
               <img v-if="addon.image" :src="addon.image" :alt="addon.title">
-              <div v-else class="addon-icon-large">{{ addon.icon || '📦' }}</div>
+              <div v-else class="addon-icon-large">{{ addon.icon || '' }}</div>
               <div class="addon-overlay">
-                <span class="addon-icon">{{ addon.icon || '📦' }}</span>
+                <span class="addon-icon">{{ addon.icon || '' }}</span>
               </div>
             </div>
             <div class="addon-content">

@@ -23,11 +23,6 @@
           <li><router-link to="/add-ons" @click="closeMenu">Add-Ons</router-link></li>
           <li><router-link to="/about" @click="closeMenu">About Us</router-link></li>
           <li><router-link to="/contact" @click="closeMenu">Contact Us</router-link></li>
-          <li class="nav-phone">
-            <a href="tel:09206609999" @click="closeMenu">
-              <span>📞</span> 0920 660 9999
-            </a>
-          </li>
         </ul>
       </div>
     </div>
