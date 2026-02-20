@@ -1,162 +1,128 @@
 <template>
   <div>
     <Navbar />
-    
-    <header class="page-header">
-      <div class="container">
-        <h1>Our Service Packages</h1>
-        <p>Thoughtfully designed funeral service packages to honor your loved one with dignity and respect.</p>
+
+    <!-- PAGE HERO -->
+    <header class="page-hero-text" style="padding-top:calc(var(--nav-height) + var(--sp-24));padding-bottom:var(--sp-20);">
+      <div class="container container--sm" style="text-align:center;">
+        <p class="overline reveal" style="margin-bottom:var(--sp-6)">Service Offerings</p>
+        <h1 class="display-lg reveal reveal--d1" style="margin-bottom:var(--sp-6)">
+          Dignified Service,<br>
+          <em class="em-gold">Personalized Care</em>
+        </h1>
+        <div class="rule rule--amber rule--medium reveal reveal--d2" style="margin:0 auto var(--sp-8);"></div>
+        <p class="serif-lg reveal reveal--d3" style="color:var(--iron);font-style:italic;max-width:640px;margin-inline:auto;">
+          Each package has been thoughtfully curated to provide families with comprehensive,
+          dignified services. We believe honoring a life should never be complicated — only meaningful.
+        </p>
       </div>
     </header>
 
-    <section class="packages-main-section">
+    <!-- PACKAGES LIST -->
+    <section class="section">
       <div class="container">
-        
-        <!-- Loading State -->
-        <div v-if="loading" class="loading-state">
-          <p>Loading packages...</p>
+
+        <!-- Loading -->
+        <div v-if="loading" class="page-loader">
+          <div class="page-loader__ring"></div>
+          <p class="page-loader__text">Loading our service packages...</p>
         </div>
 
-        <!-- Packages Display -->
-        <div v-else-if="packages.length > 0" class="packages-container">
-          
-          <!-- Each Package Card -->
-          <div v-for="pkg in packages" :key="pkg._id" class="package-wrapper">
-            
-            <!-- Package Main Card -->
-            <div class="package-card">
-              <div class="package-header">
-                <div v-if="pkg.image" class="package-image">
-                  <img :src="pkg.image" :alt="pkg.name" />
+        <!-- Magazine layout -->
+        <div v-else-if="packages.length > 0" class="packages-list">
+          <article
+            v-for="(pkg, index) in packages"
+            :key="pkg._id"
+            class="pkg-feature reveal"
+            :class="{ 'pkg-feature--reverse': index % 2 !== 0 }"
+          >
+            <!-- Visual -->
+            <div class="pkg-feature__visual">
+              <div class="pkg-frame">
+                <span class="pkg-frame__corner pkg-frame__corner--tl"></span>
+                <span class="pkg-frame__corner pkg-frame__corner--tr"></span>
+                <span class="pkg-frame__corner pkg-frame__corner--bl"></span>
+                <span class="pkg-frame__corner pkg-frame__corner--br"></span>
+                <div class="pkg-frame__img">
+                  <img v-if="pkg.image" :src="pkg.image" :alt="pkg.name" class="pkg-img" />
+                  <div v-else class="img-ph" style="width:100%;aspect-ratio:4/5;min-height:400px;">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    <span>{{ pkg.name }}</span>
+                  </div>
                 </div>
-                <h2 class="package-name">{{ pkg.name }}</h2>
-                <p class="package-tagline">{{ pkg.tagline }}</p>
               </div>
-              
-              <div class="package-body">
-                <p class="package-description">{{ pkg.description }}</p>
-                <ul class="package-features">
-                  <li v-for="(feature, index) in pkg.features" :key="index">{{ feature }}</li>
+            </div>
+
+            <!-- Content -->
+            <div class="pkg-feature__body">
+              <span class="label c-amber" style="margin-bottom:var(--sp-4);display:block;">Package {{ index + 1 }}</span>
+              <h2 class="display-sm" style="margin-bottom:var(--sp-3)">{{ pkg.name }}</h2>
+              <p class="serif-sm" style="color:var(--amber);font-style:italic;margin-bottom:var(--sp-8)">{{ pkg.tagline }}</p>
+              <p class="serif-body" style="color:var(--iron);margin-bottom:var(--sp-10)">{{ pkg.description }}</p>
+
+              <div style="margin-bottom:var(--sp-10)">
+                <p class="label" style="margin-bottom:var(--sp-6)">What's Included</p>
+                <ul class="pkg-features">
+                  <li v-for="(feat, fi) in pkg.features" :key="fi" class="pkg-feature-item">
+                    <span class="pkg-feature-item__dot"></span>
+                    <span class="serif-sm" style="color:var(--iron)">{{ feat }}</span>
+                  </li>
                 </ul>
               </div>
-              
-<div class="package-footer">
-  <router-link 
-    :to="`/packages/${pkg._id}/caskets`" 
-    class="btn btn-primary btn-full"
-  >
-    View Available Caskets
-  </router-link>
-</div>
+
+              <router-link :to="`/packages/${pkg._id}/caskets`" class="btn btn--primary btn--cta">
+                View Casket Selection
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </router-link>
             </div>
-
-            <!-- Caskets Section (Expandable) -->
-            <div v-show="expandedPackage === pkg._id" class="caskets-section">
-              <div class="caskets-header-section">
-                <h3>Available Caskets for {{ pkg.name }}</h3>
-                <p>Choose from our selection of quality caskets</p>
-              </div>
-
-              <div v-if="loadingCaskets" class="loading-caskets">
-                <p>Loading caskets...</p>
-              </div>
-
-              <div v-else-if="currentCaskets.length > 0" class="caskets-list">
-                <div v-for="casket in currentCaskets" :key="casket._id" class="casket-item">
-                  
-                  <div class="casket-image-box">
-                    <img v-if="casket.image" :src="casket.image" :alt="casket.name" />
-                    <div v-else class="casket-no-image">
-                      <span>{{ casket.material }}</span>
-                    </div>
-                  </div>
-                  
-                  <div class="casket-info-box">
-                    <div class="casket-title-row">
-                      <h4>{{ casket.name }}</h4>
-                      <span class="material-badge">{{ casket.material }}</span>
-                    </div>
-                    
-                    <p v-if="casket.description" class="casket-desc">{{ casket.description }}</p>
-                    <p v-if="casket.specifications" class="casket-spec">
-                      <strong>Specifications:</strong> {{ casket.specifications }}
-                    </p>
-                    
-                    <div class="casket-price-row">
-                      <span v-if="casket.discountedPrice" class="price-old">
-                        ₱{{ casket.regularPrice.toLocaleString() }}
-                      </span>
-                      <span class="price-now">
-                        ₱{{ (casket.discountedPrice || casket.regularPrice).toLocaleString() }}
-                      </span>
-                      <span v-if="casket.discountedPrice" class="price-save">
-                        Save ₱{{ (casket.regularPrice - casket.discountedPrice).toLocaleString() }}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div class="casket-button-box">
-                    <router-link to="/contact" class="btn-inquire">Inquire</router-link>
-                  </div>
-                  
-                </div>
-              </div>
-
-              <div v-else class="no-caskets-message">
-                <p>No caskets available for this package at the moment.</p>
-                <router-link to="/contact" class="btn-contact-us">Contact Us</router-link>
-              </div>
-            </div>
-
-          </div>
-          
+          </article>
         </div>
 
-        <!-- No Packages State -->
-        <div v-else class="no-packages-state">
-          <p>No packages available at the moment.</p>
-          <router-link to="/contact" class="btn-contact-us">Contact Us</router-link>
+        <!-- Empty -->
+        <div v-else class="empty-state">
+          <h3 style="margin-bottom:var(--sp-4)">No Packages Available</h3>
+          <p style="margin-bottom:var(--sp-8)">Please contact us directly for personalized service arrangements.</p>
+          <router-link to="/contact" class="btn btn--primary btn--cta">Contact Our Team</router-link>
         </div>
 
       </div>
     </section>
 
-    <!-- Payment Info Section -->
-    <section class="payment-info-section">
+    <!-- PAYMENT ASSURANCE -->
+    <section class="section section--deep">
       <div class="container">
-        <h2>Flexible Payment Options</h2>
-        <p>We understand that financial considerations are important during this difficult time. Velasquez Funeral and Chapel offers flexible payment arrangements to accommodate every family's budget.</p>
-        
-        <div class="payment-cards">
-          <div class="payment-card">
-            <div class="payment-icon">💳</div>
-            <h3>Installment Plans</h3>
-            <p>Begin with a 30% down payment and arrange comfortable monthly installments that work for your family.</p>
-          </div>
-          <div class="payment-card">
-            <div class="payment-icon">📋</div>
-            <h3>Transparent Pricing</h3>
-            <p>Clear, upfront pricing with no hidden fees. We'll explain all costs before you make any commitment.</p>
-          </div>
-          <div class="payment-card">
-            <div class="payment-icon">🤝</div>
-            <h3>Personal Consultation</h3>
-            <p>Our team will work with you to find a package and payment plan that honors your loved one within your budget.</p>
+        <div style="text-align:center;margin-bottom:var(--sp-20)" class="reveal">
+          <p class="overline" style="margin-bottom:var(--sp-4)">Transparent &amp; Flexible</p>
+          <h2 class="display-md" style="margin-bottom:var(--sp-6)">Financial Clarity &amp; Flexibility</h2>
+          <p class="serif-lg" style="color:var(--iron);font-style:italic;max-width:640px;margin-inline:auto;">
+            We believe cost should never be a barrier to honoring your loved one with dignity.
+          </p>
+        </div>
+
+        <div class="assurance-grid">
+          <div v-for="(a, i) in assurance" :key="i" class="assurance-card reveal" :class="`reveal--d${i+1}`">
+            <span class="assurance-card__num">0{{ i + 1 }}</span>
+            <h3 class="display-xs" style="margin-bottom:var(--sp-4)">{{ a.title }}</h3>
+            <p class="serif-sm" style="color:var(--iron)">{{ a.text }}</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-      <div class="container">
-        <div class="cta-content">
-          <h2>Need Help Choosing?</h2>
-          <p>Our compassionate team is here to guide you through the selection process and answer any questions you may have.</p>
-          <div class="cta-buttons">
-            <router-link to="/contact" class="btn btn-primary">Contact Us Today</router-link>
-            <router-link to="/add-ons" class="btn btn-outline">View Additional Services</router-link>
-          </div>
+    <!-- GUIDANCE CTA -->
+    <section class="section" style="text-align:center;">
+      <div class="container container--xs">
+        <p class="overline reveal" style="margin-bottom:var(--sp-6)">Need Assistance?</p>
+        <h2 class="display-md reveal reveal--d1" style="margin-bottom:var(--sp-6)">
+          Let Us <em class="em-gold">Guide You</em>
+        </h2>
+        <p class="serif-lg reveal reveal--d2" style="color:var(--iron);font-style:italic;margin-bottom:var(--sp-12)">
+          Choosing the right service can feel overwhelming. Our compassionate advisors are here
+          to answer questions and help you make the choice that feels right for your family.
+        </p>
+        <div class="reveal reveal--d3" style="display:flex;gap:var(--sp-4);justify-content:center;flex-wrap:wrap;">
+          <router-link to="/contact" class="btn btn--primary btn--cta">Speak With Our Team</router-link>
+          <router-link to="/add-ons" class="btn btn--ghost-dark btn--cta">Explore Add-On Services</router-link>
         </div>
       </div>
     </section>
@@ -174,508 +140,129 @@ import seoMeta from '@/mixins/seoMeta'
 export default {
   name: 'PackagesPage',
   mixins: [seoMeta],
-  components: {
-    Navbar,
-    Footer
-  },
+  components: { Navbar, Footer },
   data() {
     return {
       packages: [],
-      currentCaskets: [],
-      loading: false,
-      seoTitle: 'Funeral Service Packages - Basic, Semi-Elegant & Elegant Options',
-      seoDescription: 'Affordable funeral service packages in Cabiao, Nueva Ecija. Choose from Basic, Semi-Elegant, or Elegant packages with flexible payment plans starting at 30% down payment. Professional embalming, casket selection, chapel services, and complete burial coordination.',
-      seoKeywords: 'funeral packages Cabiao, affordable funeral services Nueva Ecija, funeral payment plans, basic funeral package, elegant funeral service, casket selection Philippines, funeral installment payment',
-      seoImage: 'https://velasquezfuneral.com/images/funeral-packages.jpg'
+      loading:  false,
+      seoTitle:       'Funeral Service Packages - Basic, Semi-Elegant & Elegant Options',
+      seoDescription: 'Affordable funeral service packages in Cabiao, Nueva Ecija. Choose from Basic, Semi-Elegant, or Elegant packages with flexible payment plans.',
+      seoKeywords:    'funeral packages Cabiao, affordable funeral services Nueva Ecija, funeral payment plans, basic funeral package, elegant funeral service',
+      seoImage:       'https://velasquezfuneral.com/images/funeral-packages.jpg',
+
+      assurance: [
+        { title: 'Flexible Installments',    text: 'Begin with a 30% down payment and arrange comfortable monthly installments tailored to your family\'s financial situation.' },
+        { title: 'Transparent Pricing',      text: 'Every cost is explained clearly and upfront. No hidden fees, no surprises — just honest, straightforward pricing.' },
+        { title: 'Personal Consultation',    text: 'Our team works closely with you to find a package and payment plan that respects both your loved one and your budget.' },
+      ]
     }
   },
-
   mounted() {
-    console.log('Packages page mounted')
     this.loadPackages()
   },
   methods: {
     async loadPackages() {
       this.loading = true
-      console.log('Loading packages...')
       try {
         const response = await api.getPackages()
-        console.log('Packages response:', response.data)
         this.packages = response.data.data
-        console.log('Packages loaded:', this.packages.length)
       } catch (error) {
         console.error('Error loading packages:', error)
       } finally {
         this.loading = false
+        this.$nextTick(() => this.initScrollAnimations())
       }
     },
+    initScrollAnimations() {
+      const reveals = document.querySelectorAll('.reveal')
+      const run = () => { reveals.forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight - 80) el.classList.add('is-visible') }) }
+      window.addEventListener('scroll', run, { passive: true })
+      run()
+    },
+    handleIconError(e) {
+      const svg = `<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#c4944a" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`
+      e.target.parentElement.innerHTML = svg
+    }
   }
 }
 </script>
 
 <style scoped>
-/* Main Section */
-.packages-main-section {
-  padding: 5rem 0;
-  background: var(--white);
-  min-height: 50vh;
-}
+/* Magazine alternating layout */
+.packages-list { display: flex; flex-direction: column; gap: var(--sp-32); }
 
-.loading-state,
-.no-packages-state {
-  text-align: center;
-  padding: 5rem 2rem;
-  font-size: 1.2rem;
-  color: var(--text-medium);
+.pkg-feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-20);
+  align-items: center;
 }
+.pkg-feature--reverse { direction: rtl; }
+.pkg-feature--reverse > * { direction: ltr; }
 
-/* Packages Container */
-.packages-container {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  margin-bottom: 3rem;
-}
-
-.package-wrapper {
-  width: 100%;
-  display: block;
-}
-
-/* Package Card */
-.package-card {
-  background: var(--cream);
-  border: 2px solid var(--border-color);
-  overflow: hidden;
-  margin-bottom: 1rem;
-}
-
-.package-header {
-  padding: 2.5rem 2rem;
-  background: var(--white);
-  border-bottom: 3px solid var(--primary-gold);
-  text-align: center;
-}
-
-.package-image {
-  width: 100%;
-  max-width: 600px;
-  height: 250px;
-  margin: 0 auto 1.5rem;
-  overflow: hidden;
-  border-radius: 8px;
-  border: 2px solid var(--primary-gold);
-}
-
-.package-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.package-name {
-  font-size: 2.5rem;
-  color: var(--rich-black);
-  margin: 0 0 0.5rem 0;
-  font-family: var(--font-heading);
-}
-
-.package-tagline {
-  color: var(--primary-gold);
-  font-size: 1rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin: 0;
-}
-
-.package-body {
-  padding: 2.5rem 2rem;
-}
-
-.package-description {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: var(--text-medium);
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.package-features {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.package-features li {
-  padding: 1rem 0 1rem 2.5rem;
-  position: relative;
-  color: var(--text-dark);
-  border-bottom: 1px solid var(--border-color);
-  font-size: 1.05rem;
-}
-
-.package-features li:last-child {
-  border-bottom: none;
-}
-
-.package-features li::before {
-  content: '✓';
+/* Gold corner frame */
+.pkg-frame { position: relative; padding: var(--sp-6); }
+.pkg-frame__corner {
   position: absolute;
-  left: 0;
-  color: var(--primary-gold);
-  font-weight: bold;
-  font-size: 1.3rem;
+  width: 36px; height: 36px;
+  border: 2px solid var(--amber);
+}
+.pkg-frame__corner--tl { top:0; left:0; border-right:none; border-bottom:none; }
+.pkg-frame__corner--tr { top:0; right:0; border-left:none; border-bottom:none; }
+.pkg-frame__corner--bl { bottom:0; left:0; border-right:none; border-top:none; }
+.pkg-frame__corner--br { bottom:0; right:0; border-left:none; border-top:none; }
+
+.pkg-frame__img { overflow: hidden; }
+.pkg-img { width:100%; aspect-ratio:4/5; object-fit:cover; display:block; transition: transform 0.8s var(--ease-out); }
+.pkg-feature:hover .pkg-img { transform: scale(1.04); }
+
+/* Features list */
+.pkg-features { list-style: none; padding: 0; }
+.pkg-feature-item {
+  display: flex; align-items: flex-start; gap: var(--sp-4);
+  padding: var(--sp-4) 0;
+  border-bottom: 1px solid var(--border);
+  transition: padding-left var(--dur-fast) var(--ease-out);
+}
+.pkg-feature-item:hover { padding-left: var(--sp-2); }
+.pkg-feature-item:last-child { border-bottom: none; }
+.pkg-feature-item__dot {
+  width: 18px; height: 18px; flex-shrink: 0; margin-top: 0.25rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C4944A' stroke-width='3' stroke-linecap='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: contain; background-repeat: no-repeat;
 }
 
-.package-footer {
-  padding: 2rem;
-  border-top: 2px solid var(--border-color);
-  text-align: center;
-}
-
-.btn-toggle-caskets {
-  width: 100%;
-  max-width: 400px;
-  padding: 1.25rem 2rem;
-  background: var(--primary-gold);
-  color: var(--white);
-  border: none;
-  font-size: 1.05rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.btn-toggle-caskets:hover {
-  background: var(--dark-gold);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(212,175,55,0.3);
-}
-
-/* Caskets Section */
-.caskets-section {
-  background: var(--light-gray);
-  border: 2px solid var(--primary-gold);
-  border-top: 4px solid var(--primary-gold);
-  padding: 2rem;
-  margin-top: 1rem;
-}
-
-.caskets-header-section {
-  text-align: center;
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 2px solid var(--border-color);
-}
-
-.caskets-header-section h3 {
-  color: var(--primary-gold);
-  font-size: 2rem;
-  margin: 0 0 0.75rem 0;
-  font-family: var(--font-heading);
-}
-
-.caskets-header-section p {
-  color: var(--text-medium);
-  font-size: 1.1rem;
-  margin: 0;
-}
-
-.loading-caskets {
-  text-align: center;
-  padding: 3rem;
-  color: var(--text-medium);
-}
-
-/* Caskets List */
-.caskets-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.casket-item {
-  display: grid;
-  grid-template-columns: 220px 1fr auto;
-  gap: 2rem;
-  background: var(--white);
-  padding: 2rem;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  align-items: center;
-}
-
-.casket-image-box {
-  width: 220px;
-  height: 160px;
+/* Assurance cards */
+.assurance-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--sp-8); }
+.assurance-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: var(--sp-10) var(--sp-8);
+  position: relative;
   overflow: hidden;
-  border-radius: 8px;
-  border: 2px solid var(--border-color);
-  flex-shrink: 0;
+  transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+}
+.assurance-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--amber), var(--amber-deep));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.assurance-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+.assurance-card:hover::before { transform: scaleX(1); }
+.assurance-card__num {
+  position: absolute; top: var(--sp-6); right: var(--sp-6);
+  font-family: var(--font-display); font-size: 5rem;
+  color: var(--amber); opacity: 0.07; font-weight: 300; line-height: 1;
 }
 
-.casket-image-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.casket-no-image {
-  width: 100%;
-  height: 100%;
-  background: var(--medium-gray);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-light);
-  font-weight: 600;
-  font-size: 1.1rem;
-}
-
-.casket-info-box {
-  flex: 1;
-  min-width: 0;
-}
-
-.casket-title-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-
-.casket-title-row h4 {
-  margin: 0;
-  font-size: 1.75rem;
-  color: var(--rich-black);
-  font-family: var(--font-heading);
-}
-
-.material-badge {
-  background: var(--primary-gold);
-  color: var(--white);
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.casket-desc {
-  margin: 0.75rem 0;
-  color: var(--text-medium);
-  line-height: 1.6;
-  font-size: 1.05rem;
-}
-
-.casket-spec {
-  margin: 0.5rem 0 1rem 0;
-  color: var(--text-light);
-  font-size: 0.95rem;
-}
-
-.casket-price-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-top: 1rem;
-}
-
-.price-old {
-  text-decoration: line-through;
-  color: var(--text-light);
-  font-size: 1.1rem;
-}
-
-.price-now {
-  color: var(--primary-gold);
-  font-size: 2.25rem;
-  font-weight: 700;
-  font-family: var(--font-heading);
-}
-
-.price-save {
-  background: #28a745;
-  color: white;
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.casket-button-box {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.btn-inquire {
-  padding: 1rem 2rem;
-  background: var(--primary-gold);
-  color: var(--white);
-  text-decoration: none;
-  font-weight: 600;
-  border-radius: 4px;
-  transition: var(--transition);
-  white-space: nowrap;
-}
-
-.btn-inquire:hover {
-  background: var(--dark-gold);
-  transform: translateY(-2px);
-}
-
-.no-caskets-message {
-  text-align: center;
-  padding: 3rem;
-  background: var(--white);
-  border-radius: 8px;
-  border: 2px solid var(--border-color);
-}
-
-.no-caskets-message p {
-  margin-bottom: 1.5rem;
-  color: var(--text-medium);
-  font-size: 1.1rem;
-}
-
-.btn-contact-us {
-  display: inline-block;
-  padding: 1rem 2rem;
-  background: var(--primary-gold);
-  color: var(--white);
-  text-decoration: none;
-  font-weight: 600;
-  border-radius: 4px;
-  transition: var(--transition);
-}
-
-.btn-contact-us:hover {
-  background: var(--dark-gold);
-}
-
-/* Payment Info Section */
-.payment-info-section {
-  background: var(--light-gray);
-  padding: 5rem 0;
-  border-top: 3px solid var(--primary-gold);
-}
-
-.payment-info-section h2 {
-  text-align: center;
-  font-size: 2.5rem;
-  color: var(--rich-black);
-  margin-bottom: 1rem;
-  font-family: var(--font-heading);
-}
-
-.payment-info-section > .container > p {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto 3rem;
-  font-size: 1.1rem;
-  color: var(--text-medium);
-  line-height: 1.8;
-}
-
-.payment-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
-}
-
-.payment-card {
-  background: var(--white);
-  padding: 2.5rem 2rem;
-  text-align: center;
-  border: 2px solid var(--border-color);
-  transition: var(--transition);
-}
-
-.payment-card:hover {
-  border-color: var(--primary-gold);
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
-}
-
-.payment-icon {
-  font-size: 3.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.payment-card h3 {
-  font-size: 1.5rem;
-  color: var(--rich-black);
-  margin-bottom: 1rem;
-  font-family: var(--font-heading);
-}
-
-.payment-card p {
-  color: var(--text-medium);
-  line-height: 1.7;
-  margin: 0;
-}
-
-/* Responsive */
 @media (max-width: 1024px) {
-  .casket-item {
-    grid-template-columns: 180px 1fr;
-    gap: 1.5rem;
-  }
-
-  .casket-image-box {
-    width: 180px;
-    height: 140px;
-  }
-
-  .casket-button-box {
-    grid-column: 1 / -1;
-    justify-content: center;
-    margin-top: 1rem;
-  }
-
-  .btn-inquire {
-    width: 100%;
-  }
+  .pkg-feature { grid-template-columns: 1fr; gap: var(--sp-10); }
+  .pkg-feature--reverse { direction: ltr; }
+  .assurance-grid { grid-template-columns: 1fr; }
 }
-
 @media (max-width: 768px) {
-  .package-name {
-    font-size: 2rem;
-  }
-
-  .casket-item {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .casket-image-box {
-    width: 100%;
-    height: 200px;
-    margin: 0 auto;
-  }
-
-  .casket-title-row {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .casket-price-row {
-    justify-content: center;
-  }
-
-  .payment-cards {
-    grid-template-columns: 1fr;
-  }
+  .packages-list { gap: var(--sp-20); }
 }
 </style>

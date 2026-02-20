@@ -1,227 +1,237 @@
 <template>
-  <div class="admin-layout">
+  <div class="adm-layout">
     <AdminSidebar />
-    
-    <div class="admin-content">
-      <div class="admin-header">
-        <h1>Manage Packages & Caskets</h1>
-        <button @click="showCreatePackageModal = true" class="btn btn-primary">+ Create Package</button>
+
+    <div class="adm-main">
+      <header class="adm-topbar">
+        <div>
+          <h1 class="adm-topbar__title">Packages &amp; Caskets</h1>
+          <p class="adm-topbar__sub">{{ packages.length }} packages · click a package to manage its caskets</p>
+        </div>
+        <button class="adm-btn adm-btn--primary" @click="showCreatePackageModal = true">+ New Package</button>
+      </header>
+
+      <div v-if="loading" class="page-loader">
+        <div class="page-loader__ring"></div>
+        <p class="page-loader__text">Loading packages…</p>
       </div>
 
-      <div v-if="loading" class="loading">Loading packages...</div>
-
-      <!-- Packages List -->
-      <div v-else class="packages-container">
-        <div v-for="pkg in packages" :key="pkg._id" class="package-section">
-          <div class="package-header-card">
-            <div class="package-info">
-              <div class="package-image-thumb" v-if="pkg.image">
+      <div v-else class="pkg-list">
+        <div v-for="pkg in packages" :key="pkg._id" class="pkg-card">
+          <!-- Package header row -->
+          <div class="pkg-card__header">
+            <div class="pkg-card__info">
+              <div v-if="pkg.image" class="pkg-card__thumb">
                 <img :src="pkg.image" :alt="pkg.name" />
               </div>
-              <div class="package-details">
-                <h2>{{ pkg.name }}</h2>
-                <span class="package-category">{{ pkg.category }}</span>
-                <p class="package-tagline">{{ pkg.tagline }}</p>
+              <div>
+                <h2 class="pkg-card__name">{{ pkg.name }}</h2>
+                <span class="adm-badge adm-badge--cat">{{ pkg.category }}</span>
+                <p class="pkg-card__tagline">{{ pkg.tagline }}</p>
               </div>
             </div>
-            <div class="package-actions">
-              <button @click="editPackage(pkg)" class="btn btn-sm btn-secondary">Edit Package</button>
-              <button @click="deletePackageConfirm(pkg._id)" class="btn btn-sm btn-danger">Delete</button>
-              <button @click="toggleCaskets(pkg._id)" class="btn btn-sm btn-outline">
+            <div class="pkg-card__actions">
+              <button class="adm-btn adm-btn--ghost adm-btn--sm" @click="editPackage(pkg)">Edit Package</button>
+              <button class="adm-btn adm-btn--outline adm-btn--sm" @click="toggleCaskets(pkg._id)">
                 {{ expandedPackage === pkg._id ? 'Hide Caskets' : 'Show Caskets' }}
               </button>
+              <button class="adm-btn adm-btn--danger adm-btn--sm" @click="deletePackageConfirm(pkg._id)">Delete</button>
             </div>
           </div>
 
-          <!-- Caskets List (Expandable) -->
-          <div v-if="expandedPackage === pkg._id" class="caskets-section">
-            <div class="caskets-header">
-              <h3>Caskets for {{ pkg.name }}</h3>
-              <button @click="openCreateCasket(pkg)" class="btn btn-sm btn-primary">+ Add Casket</button>
+          <!-- Caskets drawer -->
+          <div v-if="expandedPackage === pkg._id" class="caskets-drawer">
+            <div class="caskets-drawer__header">
+              <h3 class="caskets-drawer__title">Caskets — {{ pkg.name }}</h3>
+              <button class="adm-btn adm-btn--primary adm-btn--sm" @click="openCreateCasket(pkg)">+ Add Casket</button>
             </div>
 
-            <div v-if="loadingCaskets" class="loading">Loading caskets...</div>
+            <div v-if="loadingCaskets" class="page-loader" style="padding:var(--sp-10) 0">
+              <div class="page-loader__ring"></div>
+            </div>
 
-            <div v-else-if="currentCaskets.length > 0" class="caskets-grid">
+            <div v-else-if="currentCaskets.length === 0" class="empty-state" style="padding:var(--sp-12) var(--sp-8)">
+              <h3>No caskets added yet</h3>
+              <p>Add the first casket for this package.</p>
+              <button class="adm-btn adm-btn--primary" @click="openCreateCasket(pkg)" style="margin-top:var(--sp-4)">Add First Casket</button>
+            </div>
+
+            <div v-else class="caskets-grid">
               <div v-for="casket in currentCaskets" :key="casket._id" class="casket-card">
-                <div class="casket-image" v-if="casket.image">
-                  <img :src="casket.image" :alt="casket.name" />
+                <div class="casket-card__img-wrap">
+                  <img v-if="casket.image" :src="casket.image" :alt="casket.name" class="casket-card__img" />
+                  <div v-else class="casket-card__img-ph">No Image</div>
+                  <span class="casket-card__mat-tag">{{ casket.material }}</span>
                 </div>
-                <div class="casket-image placeholder" v-else>No Image</div>
-                
-                <div class="casket-details">
-                  <h4>{{ casket.name }}</h4>
-                  <span class="casket-material">{{ casket.material }}</span>
-                  <div class="casket-pricing">
-                    <span v-if="casket.discountedPrice" class="price-regular">₱{{ casket.regularPrice.toLocaleString() }}</span>
-                    <span class="price-current">₱{{ (casket.discountedPrice || casket.regularPrice).toLocaleString() }}</span>
+                <div class="casket-card__body">
+                  <h4 class="casket-card__name">{{ casket.name }}</h4>
+                  <div class="casket-card__pricing">
+                    <span v-if="casket.discountedPrice" class="casket-card__orig">₱{{ casket.regularPrice.toLocaleString() }}</span>
+                    <span class="casket-card__price">₱{{ (casket.discountedPrice || casket.regularPrice).toLocaleString() }}</span>
                   </div>
-                  <p class="casket-specs" v-if="casket.specifications">{{ casket.specifications }}</p>
+                  <p v-if="casket.specifications" class="casket-card__specs">{{ casket.specifications }}</p>
                 </div>
-                
-                <div class="casket-actions">
-                  <button @click="editCasket(casket)" class="btn btn-sm btn-secondary">Edit</button>
-                  <button @click="deleteCasketConfirm(casket._id)" class="btn btn-sm btn-danger">Delete</button>
+                <div class="casket-card__footer">
+                  <button class="adm-btn adm-btn--ghost adm-btn--sm" @click="editCasket(casket)">Edit</button>
+                  <button class="adm-btn adm-btn--danger adm-btn--sm" @click="deleteCasketConfirm(casket._id)">Delete</button>
                 </div>
               </div>
             </div>
-
-            <div v-else class="no-caskets">
-              <p>No caskets added yet.</p>
-              <button @click="openCreateCasket(pkg)" class="btn btn-primary">Add First Casket</button>
-            </div>
           </div>
+        </div>
+
+        <div v-if="packages.length === 0" class="empty-state">
+          <h3>No packages yet</h3>
+          <p>Create your first funeral package to get started.</p>
         </div>
       </div>
 
-      <!-- Create/Edit Package Modal -->
-      <div v-if="showCreatePackageModal || showEditPackageModal" class="modal-overlay" @click="closeModals">
-        <div class="modal-content" @click.stop>
-          <div class="modal-header">
-            <h2>{{ showEditPackageModal ? 'Edit Package' : 'Create New Package' }}</h2>
-            <button @click="closeModals" class="modal-close">&times;</button>
+      <!-- Package Modal -->
+      <div v-if="showCreatePackageModal || showEditPackageModal" class="adm-modal-overlay" @click="closeModals">
+        <div class="adm-modal" @click.stop>
+          <div class="adm-modal__header">
+            <h2 class="adm-modal__title">{{ showEditPackageModal ? 'Edit Package' : 'New Package' }}</h2>
+            <button class="adm-modal__close" @click="closeModals" aria-label="Close">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
           </div>
-          
-          <form @submit.prevent="savePackage" class="modal-form">
-            <div class="form-group">
-              <label>Package Name *</label>
-              <input v-model="packageForm.name" type="text" required placeholder="e.g., Basic Package" />
+          <form @submit.prevent="savePackage" class="adm-modal__body">
+            <div class="adm-form-row">
+              <div class="form-group">
+                <label class="form-label">Package Name *</label>
+                <input class="form-input" v-model="packageForm.name" type="text" required placeholder="e.g., Basic Package" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Category *</label>
+                <select class="form-select" v-model="packageForm.category" required>
+                  <option value="">Select Category</option>
+                  <option value="Basic">Basic</option>
+                  <option value="Semi-Elegant">Semi-Elegant</option>
+                  <option value="Elegant">Elegant</option>
+                </select>
+              </div>
             </div>
-
             <div class="form-group">
-              <label>Category *</label>
-              <select v-model="packageForm.category" required>
-                <option value="">Select Category</option>
-                <option value="Basic">Basic</option>
-                <option value="Semi-Elegant">Semi-Elegant</option>
-                <option value="Elegant">Elegant</option>
-              </select>
+              <label class="form-label">Tagline *</label>
+              <input class="form-input" v-model="packageForm.tagline" type="text" required placeholder="e.g., Essential Services with Dignity" />
             </div>
-
             <div class="form-group">
-              <label>Tagline *</label>
-              <input v-model="packageForm.tagline" type="text" required placeholder="e.g., Essential Services with Dignity" />
+              <label class="form-label">Description *</label>
+              <textarea class="form-textarea" v-model="packageForm.description" rows="4" required></textarea>
             </div>
-
             <div class="form-group">
-              <label>Description *</label>
-              <textarea v-model="packageForm.description" rows="4" required></textarea>
-            </div>
-
-            <div class="form-group">
-              <label>Package Image</label>
-              <div class="image-upload-area">
-                <div v-if="!packageForm.image" class="upload-placeholder">
-                  <input type="file" @change="handlePackageImageUpload" accept="image/*" ref="packageImageInput" id="packageImage" style="display: none;" />
-                  <label for="packageImage" class="upload-btn">Upload Image</label>
+              <label class="form-label">Package Image</label>
+              <div class="adm-upload-zone">
+                <div v-if="!packageForm.image">
+                  <input type="file" @change="handlePackageImageUpload" accept="image/*" ref="packageImageInput" id="packageImage" style="display:none" />
+                  <label for="packageImage" class="adm-upload-zone__label">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    <span>Upload Image</span>
+                  </label>
                 </div>
-                <div v-else class="image-preview-box">
+                <div v-else class="adm-upload-zone__preview">
                   <img :src="packageForm.image" alt="Preview" />
-                  <button type="button" @click="removePackageImage" class="btn btn-sm btn-danger">Remove</button>
+                  <button type="button" class="adm-btn adm-btn--danger adm-btn--sm" @click="removePackageImage">Remove</button>
                 </div>
               </div>
-              <div v-if="uploadingPackageImage" class="upload-progress">Uploading...</div>
+              <div v-if="uploadingPackageImage" class="adm-progress"><div class="adm-progress__bar"></div></div>
             </div>
-
             <div class="form-group">
-              <label>Features/Inclusions (one per line)</label>
-              <textarea v-model="featuresText" rows="8" placeholder="Professional embalming services&#10;Transfer to funeral home&#10;Basic venue preparation"></textarea>
+              <label class="form-label">Features / Inclusions <span class="adm-hint" style="display:inline">(one per line)</span></label>
+              <textarea class="form-textarea" v-model="featuresText" rows="8" placeholder="Professional embalming services&#10;Transfer to funeral home&#10;Basic venue preparation"></textarea>
             </div>
-
             <div class="form-group">
-              <label class="checkbox-label">
-                <input v-model="packageForm.published" type="checkbox" />
+              <label class="adm-checkbox">
+                <input type="checkbox" v-model="packageForm.published" />
                 <span>Publish immediately</span>
               </label>
             </div>
-
-            <div class="modal-actions">
-              <button type="button" @click="closeModals" class="btn btn-secondary">Cancel</button>
-              <button type="submit" class="btn btn-primary" :disabled="saving">
-                {{ saving ? 'Saving...' : (showEditPackageModal ? 'Update Package' : 'Create Package') }}
+            <div class="adm-modal__footer">
+              <button type="button" class="adm-btn adm-btn--ghost" @click="closeModals">Cancel</button>
+              <button type="submit" class="adm-btn adm-btn--primary" :disabled="saving">
+                {{ saving ? 'Saving…' : (showEditPackageModal ? 'Update Package' : 'Create Package') }}
               </button>
             </div>
           </form>
         </div>
       </div>
 
-      <!-- Create/Edit Casket Modal -->
-      <div v-if="showCreateCasketModal || showEditCasketModal" class="modal-overlay" @click="closeModals">
-        <div class="modal-content" @click.stop>
-          <div class="modal-header">
-            <h2>{{ showEditCasketModal ? 'Edit Casket' : 'Add New Casket' }}</h2>
-            <button @click="closeModals" class="modal-close">&times;</button>
+      <!-- Casket Modal -->
+      <div v-if="showCreateCasketModal || showEditCasketModal" class="adm-modal-overlay" @click="closeModals">
+        <div class="adm-modal" @click.stop>
+          <div class="adm-modal__header">
+            <h2 class="adm-modal__title">{{ showEditCasketModal ? 'Edit Casket' : 'Add Casket' }}</h2>
+            <button class="adm-modal__close" @click="closeModals" aria-label="Close">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
           </div>
-          
-          <form @submit.prevent="saveCasket" class="modal-form">
-            <div class="form-group">
-              <label>Casket Name *</label>
-              <input v-model="casketForm.name" type="text" required placeholder="e.g., OMS, Tapiada, Full Glass" />
-            </div>
-
-            <div class="form-group">
-              <label>Material *</label>
-              <select v-model="casketForm.material" required>
-                <option value="">Select Material</option>
-                <option value="Wood">Wood</option>
-                <option value="Metal">Metal</option>
-                <option value="Imported">Imported</option>
-              </select>
-            </div>
-
-            <div class="form-row">
+          <form @submit.prevent="saveCasket" class="adm-modal__body">
+            <div class="adm-form-row">
               <div class="form-group">
-                <label>Regular Price (₱) *</label>
-                <input v-model.number="casketForm.regularPrice" type="number" required placeholder="95000" />
+                <label class="form-label">Casket Name *</label>
+                <input class="form-input" v-model="casketForm.name" type="text" required placeholder="e.g., OMS, Tapiada, Full Glass" />
               </div>
-
               <div class="form-group">
-                <label>Discounted Price (₱)</label>
-                <input v-model.number="casketForm.discountedPrice" type="number" placeholder="70000" />
+                <label class="form-label">Material *</label>
+                <select class="form-select" v-model="casketForm.material" required>
+                  <option value="">Select Material</option>
+                  <option value="Wood">Wood</option>
+                  <option value="Metal">Metal</option>
+                  <option value="Imported">Imported</option>
+                </select>
               </div>
             </div>
-
-            <div class="form-group">
-              <label>Specifications</label>
-              <input v-model="casketForm.specifications" type="text" placeholder="e.g., 27''/190cm, Standard Size" />
+            <div class="adm-form-row">
+              <div class="form-group">
+                <label class="form-label">Regular Price (₱) *</label>
+                <input class="form-input" v-model.number="casketForm.regularPrice" type="number" required placeholder="95000" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Discounted Price (₱)</label>
+                <input class="form-input" v-model.number="casketForm.discountedPrice" type="number" placeholder="70000" />
+              </div>
             </div>
-
             <div class="form-group">
-              <label>Description</label>
-              <textarea v-model="casketForm.description" rows="3" placeholder="Brief description of the casket"></textarea>
+              <label class="form-label">Specifications</label>
+              <input class="form-input" v-model="casketForm.specifications" type="text" placeholder="e.g., 27''/190cm, Standard Size" />
             </div>
-
             <div class="form-group">
-              <label>Casket Image</label>
-              <div class="image-upload-area">
-                <div v-if="!casketForm.image" class="upload-placeholder">
-                  <input type="file" @change="handleCasketImageUpload" accept="image/*" ref="casketImageInput" id="casketImage" style="display: none;" />
-                  <label for="casketImage" class="upload-btn">Upload Image</label>
+              <label class="form-label">Description</label>
+              <textarea class="form-textarea" v-model="casketForm.description" rows="3" placeholder="Brief description of the casket"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Casket Image</label>
+              <div class="adm-upload-zone">
+                <div v-if="!casketForm.image">
+                  <input type="file" @change="handleCasketImageUpload" accept="image/*" ref="casketImageInput" id="casketImage" style="display:none" />
+                  <label for="casketImage" class="adm-upload-zone__label">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    <span>Upload Image</span>
+                  </label>
                 </div>
-                <div v-else class="image-preview-box">
+                <div v-else class="adm-upload-zone__preview">
                   <img :src="casketForm.image" alt="Preview" />
-                  <button type="button" @click="removeCasketImage" class="btn btn-sm btn-danger">Remove</button>
+                  <button type="button" class="adm-btn adm-btn--danger adm-btn--sm" @click="removeCasketImage">Remove</button>
                 </div>
               </div>
-              <div v-if="uploadingCasketImage" class="upload-progress">Uploading...</div>
+              <div v-if="uploadingCasketImage" class="adm-progress"><div class="adm-progress__bar"></div></div>
             </div>
-
             <div class="form-group">
-              <label class="checkbox-label">
-                <input v-model="casketForm.published" type="checkbox" />
+              <label class="adm-checkbox">
+                <input type="checkbox" v-model="casketForm.published" />
                 <span>Publish immediately</span>
               </label>
             </div>
-
-            <div class="modal-actions">
-              <button type="button" @click="closeModals" class="btn btn-secondary">Cancel</button>
-              <button type="submit" class="btn btn-primary" :disabled="saving">
-                {{ saving ? 'Saving...' : (showEditCasketModal ? 'Update Casket' : 'Add Casket') }}
+            <div class="adm-modal__footer">
+              <button type="button" class="adm-btn adm-btn--ghost" @click="closeModals">Cancel</button>
+              <button type="submit" class="adm-btn adm-btn--primary" :disabled="saving">
+                {{ saving ? 'Saving…' : (showEditCasketModal ? 'Update Casket' : 'Add Casket') }}
               </button>
             </div>
           </form>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -232,745 +242,201 @@ import api from '@/services/api'
 
 export default {
   name: 'AdminPackagesCasketsPage',
-  components: {
-    AdminSidebar
-  },
+  components: { AdminSidebar },
   data() {
     return {
-      packages: [],
-      currentCaskets: [],
-      loading: false,
-      loadingCaskets: false,
-      saving: false,
-      uploadingPackageImage: false,
-      uploadingCasketImage: false,
-      expandedPackage: null,
-      
-      showCreatePackageModal: false,
-      showEditPackageModal: false,
-      showCreateCasketModal: false,
-      showEditCasketModal: false,
-      
-      packageForm: this.getEmptyPackageForm(),
-      casketForm: this.getEmptyCasketForm(),
-      featuresText: '',
-      
-      editingPackageId: null,
-      editingCasketId: null,
-      currentPackage: null
+      packages: [], currentCaskets: [], loading: false, loadingCaskets: false, saving: false,
+      uploadingPackageImage: false, uploadingCasketImage: false, expandedPackage: null,
+      showCreatePackageModal: false, showEditPackageModal: false,
+      showCreateCasketModal: false, showEditCasketModal: false,
+      packageForm: this.getEmptyPackageForm(), casketForm: this.getEmptyCasketForm(),
+      featuresText: '', editingPackageId: null, editingCasketId: null, currentPackage: null
     }
   },
-  mounted() {
-    this.loadPackages()
-  },
+  mounted() { this.loadPackages() },
   methods: {
-    getEmptyPackageForm() {
-      return {
-        name: '',
-        category: '',
-        tagline: '',
-        description: '',
-        image: '',
-        features: [],
-        published: true
-      }
-    },
-    
-    getEmptyCasketForm() {
-      return {
-        packageId: '',
-        name: '',
-        material: '',
-        regularPrice: 0,
-        discountedPrice: null,
-        description: '',
-        specifications: '',
-        image: '',
-        published: true
-      }
-    },
-    
+    getEmptyPackageForm() { return { name:'', category:'', tagline:'', description:'', image:'', features:[], published:true } },
+    getEmptyCasketForm()  { return { packageId:'', name:'', material:'', regularPrice:0, discountedPrice:null, description:'', specifications:'', image:'', published:true } },
     async loadPackages() {
       this.loading = true
-      try {
-        const response = await api.getAllPackagesAdmin()
-        this.packages = response.data.data
-      } catch (error) {
-        console.error('Error loading packages:', error)
-        this.$toast.error('Failed to load packages')
-      } finally {
-        this.loading = false
-      }
+      try { const r = await api.getAllPackagesAdmin(); this.packages = r.data.data }
+      catch (error) { console.error('Error loading packages:', error); this.$toast.error('Failed to load packages') }
+      finally { this.loading = false }
     },
-    
     async toggleCaskets(packageId) {
-      if (this.expandedPackage === packageId) {
-        this.expandedPackage = null
-        this.currentCaskets = []
-      } else {
-        this.expandedPackage = packageId
-        await this.loadCaskets(packageId)
-      }
+      if (this.expandedPackage === packageId) { this.expandedPackage = null; this.currentCaskets = [] }
+      else { this.expandedPackage = packageId; await this.loadCaskets(packageId) }
     },
-    
     async loadCaskets(packageId) {
       this.loadingCaskets = true
-      try {
-        const response = await api.getCasketsByPackageAdmin(packageId)
-        this.currentCaskets = response.data.data
-      } catch (error) {
-        console.error('Error loading caskets:', error)
-        this.$toast.error('Failed to load caskets')
-      } finally {
-        this.loadingCaskets = false
-      }
+      try { const r = await api.getCasketsByPackageAdmin(packageId); this.currentCaskets = r.data.data }
+      catch (error) { console.error('Error loading caskets:', error); this.$toast.error('Failed to load caskets') }
+      finally { this.loadingCaskets = false }
     },
-    
-    // Package Image Upload
     async handlePackageImageUpload(event) {
-      const file = event.target.files[0]
-      if (!file) return
-
+      const file = event.target.files[0]; if (!file) return
       this.uploadingPackageImage = true
       try {
-        const formData = new FormData()
-        formData.append('image', file)
-
+        const formData = new FormData(); formData.append('image', file)
         const token = localStorage.getItem('adminToken')
         const API_URL = process.env.VUE_APP_API_URL || 'http://localhost:5000/api'
-        
-        const response = await fetch(`${API_URL}/upload/image`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` },
-          body: formData
-        })
-
+        const response = await fetch(`${API_URL}/upload/image`, { method:'POST', headers:{'Authorization':`Bearer ${token}`}, body:formData })
         const data = await response.json()
-        if (data.success) {
-          this.packageForm.image = data.url
-        } else {
-          this.$toast.error('Upload failed: ' + data.message)
-        }
-      } catch (error) {
-        console.error('Upload error:', error)
-        this.$toast.error('Failed to upload image')
-      } finally {
-        this.uploadingPackageImage = false
-      }
+        if (data.success) { this.packageForm.image = data.url } else { this.$toast.error('Upload failed: ' + data.message) }
+      } catch (error) { console.error('Upload error:', error); this.$toast.error('Failed to upload image') }
+      finally { this.uploadingPackageImage = false }
     },
-
-    removePackageImage() {
-      this.packageForm.image = ''
-      if (this.$refs.packageImageInput) {
-        this.$refs.packageImageInput.value = ''
-      }
-    },
-    
-    // Casket Image Upload
+    removePackageImage() { this.packageForm.image = ''; if (this.$refs.packageImageInput) this.$refs.packageImageInput.value = '' },
     async handleCasketImageUpload(event) {
-      const file = event.target.files[0]
-      if (!file) return
-
+      const file = event.target.files[0]; if (!file) return
       this.uploadingCasketImage = true
       try {
-        const formData = new FormData()
-        formData.append('image', file)
-
+        const formData = new FormData(); formData.append('image', file)
         const token = localStorage.getItem('adminToken')
         const API_URL = process.env.VUE_APP_API_URL || 'http://localhost:5000/api'
-        
-        const response = await fetch(`${API_URL}/upload/image`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` },
-          body: formData
-        })
-
+        const response = await fetch(`${API_URL}/upload/image`, { method:'POST', headers:{'Authorization':`Bearer ${token}`}, body:formData })
         const data = await response.json()
-        if (data.success) {
-          this.casketForm.image = data.url
-        } else {
-          this.$toast.error('Upload failed: ' + data.message)
-        }
+        if (data.success) { this.casketForm.image = data.url } else { this.$toast.error('Upload failed: ' + data.message) }
+      } catch (error) { console.error('Upload error:', error); this.$toast.error('Failed to upload image') }
+      finally { this.uploadingCasketImage = false }
+    },
+    removeCasketImage() { this.casketForm.image = ''; if (this.$refs.casketImageInput) this.$refs.casketImageInput.value = '' },
+    editPackage(pkg) { this.packageForm = { ...pkg }; this.featuresText = pkg.features.join('\n'); this.editingPackageId = pkg._id; this.showEditPackageModal = true },
+    async savePackage() {
+      this.packageForm.features = this.featuresText.split('\n').filter(f => f.trim())
+      this.saving = true
+      try {
+        if (this.showEditPackageModal) { await api.updatePackage(this.editingPackageId, this.packageForm); this.$toast.success('Package updated successfully!') }
+        else { await api.createPackage(this.packageForm); this.$toast.success('Package created successfully!') }
+        this.closeModals(); await this.loadPackages()
       } catch (error) {
-        console.error('Upload error:', error)
-        this.$toast.error('Failed to upload image')
-      } finally {
-        this.uploadingCasketImage = false
+        console.error('Error saving package:', error)
+        this.$toast.error(error?.response?.data?.message || error?.response?.data?.error || error?.message || 'Failed to save package')
+      } finally { this.saving = false }
+    },
+    async deletePackageConfirm(id) {
+      const confirmed = await this.$confirm({ title:'Delete Package', message:'Are you sure? This action cannot be undone.', confirmText:'Delete' })
+      if (confirmed) {
+        try { await api.deletePackage(id); this.$toast.success('Package deleted successfully'); this.loadPackages() }
+        catch (error) { console.error('Error deleting package:', error); this.$toast.error('Failed to delete package') }
       }
     },
-
-    removeCasketImage() {
-      this.casketForm.image = ''
-      if (this.$refs.casketImageInput) {
-        this.$refs.casketImageInput.value = ''
+    openCreateCasket(pkg) { this.currentPackage = pkg; this.casketForm.packageId = pkg._id; this.showCreateCasketModal = true },
+    editCasket(casket) { this.casketForm = { ...casket }; this.editingCasketId = casket._id; this.showEditCasketModal = true },
+    async saveCasket() {
+      this.saving = true
+      try {
+        if (this.showEditCasketModal) { await api.updateCasket(this.editingCasketId, this.casketForm); this.$toast.success('Casket updated successfully!') }
+        else { await api.createCasket(this.casketForm); this.$toast.success('Casket added successfully!') }
+        this.closeModals(); if (this.expandedPackage) await this.loadCaskets(this.expandedPackage)
+      } catch (error) { console.error('Error saving casket:', error); this.$toast.error('Failed to save casket') }
+      finally { this.saving = false }
+    },
+    async deleteCasketConfirm(id) {
+      const confirmed = await this.$confirm({ title:'Delete Casket', message:'Are you sure? This action cannot be undone.', confirmText:'Delete' })
+      if (confirmed) {
+        try { await api.deleteCasket(id); this.$toast.success('Casket deleted successfully'); if (this.expandedPackage) await this.loadCaskets(this.expandedPackage) }
+        catch (error) { console.error('Error deleting casket:', error); this.$toast.error('Failed to delete casket') }
       }
     },
-    
-    // Package CRUD
-    editPackage(pkg) {
-      this.packageForm = { ...pkg }
-      this.featuresText = pkg.features.join('\n')
-      this.editingPackageId = pkg._id
-      this.showEditPackageModal = true
-    },
-    
-async savePackage() {
-  this.packageForm.features = this.featuresText.split('\n').filter(f => f.trim())
-  
-  this.saving = true
-  try {
-    let response
-    
-    if (this.showEditPackageModal) {
-      response = await api.updatePackage(this.editingPackageId, this.packageForm)
-      this.$toast.success('Package updated successfully!')
-    } else {
-      response = await api.createPackage(this.packageForm)
-      this.$toast.success('Package created successfully!')
-    }
-    
-    console.log('API Response:', response) // Debug log
-    
-    this.closeModals()
-    await this.loadPackages() // Make sure this completes
-    
-  } catch (error) {
-    console.error('Error saving package:', error)
-    
-    // Better error message extraction
-    const errorMsg = error?.response?.data?.message 
-                  || error?.response?.data?.error
-                  || error?.message 
-                  || 'Failed to save package'
-    
-    this.$toast.error(errorMsg)
-  } finally {
-    this.saving = false
-  }
-},
-    
-async deletePackageConfirm(id) {
-  const confirmed = await this.$confirm({
-    title: 'Delete Package',
-    message: 'Are you sure you want to delete this package? This action cannot be undone.',
-    confirmText: 'Delete'
-  })
-
-  if (confirmed) {
-    try {
-      await api.deletePackage(id)
-      this.$toast.success('Package deleted successfully')
-      this.loadPackages()
-    } catch (error) {
-      console.error('Error deleting package:', error)
-      this.$toast.error('Failed to delete package')
-    }
-  }
-},
-    
-    // Casket CRUD
-    openCreateCasket(pkg) {
-      this.currentPackage = pkg
-      this.casketForm.packageId = pkg._id
-      this.showCreateCasketModal = true
-    },
-    
-    editCasket(casket) {
-      this.casketForm = { ...casket }
-      this.editingCasketId = casket._id
-      this.showEditCasketModal = true
-    },
-    
-async savePackage() {
-  this.packageForm.features = this.featuresText.split('\n').filter(f => f.trim())
-  
-  this.saving = true
-  try {
-    if (this.showEditPackageModal) {
-      await api.updatePackage(this.editingPackageId, this.packageForm)
-      this.$toast.success('Package updated successfully!')
-    } else {
-      await api.createPackage(this.packageForm)
-      this.$toast.success('Package created successfully!')
-    }
-    
-    this.closeModals()
-    this.loadPackages()
-  } catch (error) {
-    console.error('Error saving package:', error)
-    this.$toast.error('Failed to save package')
-  } finally {
-    this.saving = false
-  }
-},
-    
-async deleteCasketConfirm(id) {
-  const confirmed = await this.$confirm({
-    title: 'Delete Casket',
-    message: 'Are you sure you want to delete this casket? This action cannot be undone.',
-    confirmText: 'Delete'
-  })
-
-  if (confirmed) {
-    try {
-      await api.deleteCasket(id)
-      this.$toast.success('Casket deleted successfully')
-      if (this.expandedPackage) {
-        await this.loadCaskets(this.expandedPackage)
-      }
-    } catch (error) {
-      console.error('Error deleting casket:', error)
-      this.$toast.error('Failed to delete casket')
-    }
-  }
-},
-    
     closeModals() {
-      this.showCreatePackageModal = false
-      this.showEditPackageModal = false
-      this.showCreateCasketModal = false
-      this.showEditCasketModal = false
-      this.packageForm = this.getEmptyPackageForm()
-      this.casketForm = this.getEmptyCasketForm()
-      this.featuresText = ''
-      this.editingPackageId = null
-      this.editingCasketId = null
+      this.showCreatePackageModal = false; this.showEditPackageModal = false
+      this.showCreateCasketModal = false; this.showEditCasketModal = false
+      this.packageForm = this.getEmptyPackageForm(); this.casketForm = this.getEmptyCasketForm()
+      this.featuresText = ''; this.editingPackageId = null; this.editingCasketId = null
     },
-    // Inside PackagesCaskets.vue
-created() {
-  if (this.$toast) {
-    console.log("✅ Toast plugin is ready!");
-  } else {
-    console.error("❌ Toast plugin is still undefined. Check main.js");
-  }
-}
-    
+    created() { if (this.$toast) console.log('✅ Toast plugin is ready!'); else console.error('❌ Toast plugin is undefined. Check main.js') }
   }
 }
 </script>
 
 <style scoped>
-.admin-layout {
-  display: flex;
-  min-height: 100vh;
-}
+.adm-layout { display: flex; min-height: 100vh; background: var(--linen); }
+.adm-main   { flex: 1; padding: var(--sp-8) var(--sp-10); overflow-y: auto; }
+.adm-topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-6); margin-bottom: var(--sp-8); padding-bottom: var(--sp-8); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.adm-topbar__title { font-family: var(--font-display); font-size: var(--display-xs); color: var(--onyx); margin: 0 0 var(--sp-1); font-weight: 600; }
+.adm-topbar__sub   { font-family: var(--font-serif); font-size: var(--text-base); font-style: italic; color: var(--stone); margin: 0; }
 
-.admin-content {
-  flex: 1;
-  padding: 2rem;
-  background: #f5f5f5;
-}
+/* Package list */
+.pkg-list { display: flex; flex-direction: column; gap: var(--sp-5); }
+.pkg-card { background: white; border: 1px solid var(--border); overflow: hidden; }
+.pkg-card__header { display: flex; align-items: center; justify-content: space-between; padding: var(--sp-6) var(--sp-8); gap: var(--sp-6); flex-wrap: wrap; }
+.pkg-card__info   { display: flex; align-items: center; gap: var(--sp-5); }
+.pkg-card__thumb  { width: 88px; height: 88px; overflow: hidden; border: 1px solid var(--border); flex-shrink: 0; }
+.pkg-card__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.pkg-card__name   { font-family: var(--font-display); font-size: var(--text-2xl); color: var(--onyx); margin: 0 0 var(--sp-2); font-weight: 600; }
+.pkg-card__tagline { font-family: var(--font-serif); font-size: var(--text-sm); color: var(--stone); font-style: italic; margin: var(--sp-2) 0 0; }
+.pkg-card__actions { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
 
-.admin-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
+/* Badges */
+.adm-badge { display: inline-block; font-family: var(--font-sans); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.25rem 0.7rem; }
+.adm-badge--pub   { background: rgba(34,197,94,0.1);  color: #15803d; }
+.adm-badge--draft { background: rgba(234,179,8,0.1);  color: #854d0e; }
+.adm-badge--cat   { background: rgba(196,148,74,0.12); color: var(--amber-deep); }
 
-.packages-container {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
+/* Caskets drawer */
+.caskets-drawer { background: var(--linen); border-top: 1px solid var(--border); padding: var(--sp-6) var(--sp-8); }
+.caskets-drawer__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-6); }
+.caskets-drawer__title  { font-family: var(--font-sans); font-size: var(--text-xs); letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--amber); font-weight: 700; margin: 0; }
+.caskets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--sp-5); }
 
-.package-section {
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+.casket-card { background: white; border: 1px solid var(--border); display: flex; flex-direction: column; transition: border-color 0.2s ease, transform 0.2s ease; }
+.casket-card:hover { border-color: var(--amber); transform: translateY(-2px); }
+.casket-card__img-wrap { position: relative; height: 180px; overflow: hidden; background: var(--linen-warm); }
+.casket-card__img { width: 100%; height: 100%; object-fit: cover; }
+.casket-card__img-ph { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: var(--text-xs); color: var(--stone); letter-spacing: var(--ls-wide); text-transform: uppercase; }
+.casket-card__mat-tag { position: absolute; bottom: var(--sp-2); left: var(--sp-2); font-family: var(--font-sans); font-size: 0.65rem; font-weight: 700; letter-spacing: var(--ls-wider); text-transform: uppercase; background: rgba(15,14,12,0.75); color: var(--amber); padding: 0.2rem 0.5rem; }
+.casket-card__body { padding: var(--sp-4) var(--sp-5); flex: 1; }
+.casket-card__name { font-family: var(--font-display); font-size: var(--text-xl); color: var(--onyx); margin: 0 0 var(--sp-3); font-weight: 600; }
+.casket-card__pricing { display: flex; align-items: baseline; gap: var(--sp-3); margin-bottom: var(--sp-2); }
+.casket-card__orig  { font-size: var(--text-sm); color: var(--stone); text-decoration: line-through; }
+.casket-card__price { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; color: var(--amber); }
+.casket-card__specs { font-family: var(--font-serif); font-size: var(--text-sm); color: var(--stone); margin: 0; font-style: italic; }
+.casket-card__footer { padding: var(--sp-3) var(--sp-5); border-top: 1px solid var(--linen-warm); display: flex; gap: var(--sp-2); background: var(--linen); }
 
-.package-header-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2rem;
-  border-bottom: 2px solid #f0f0f0;
-}
+/* Buttons */
+.adm-btn { display: inline-flex; align-items: center; gap: var(--sp-2); padding: 0.6rem 1.25rem; font-family: var(--font-sans); font-size: var(--text-xs); font-weight: 600; letter-spacing: var(--ls-wide); text-transform: uppercase; border: 1px solid transparent; cursor: pointer; transition: all 0.2s ease; text-decoration: none; }
+.adm-btn--primary { background: var(--amber); color: var(--onyx); border-color: var(--amber); }
+.adm-btn--primary:hover:not(:disabled) { background: var(--amber-deep); border-color: var(--amber-deep); }
+.adm-btn--primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.adm-btn--ghost   { background: transparent; color: var(--iron); border-color: var(--border); }
+.adm-btn--ghost:hover { border-color: var(--amber); color: var(--amber); }
+.adm-btn--outline { background: transparent; color: var(--amber); border-color: rgba(196,148,74,0.4); }
+.adm-btn--outline:hover { background: rgba(196,148,74,0.06); border-color: var(--amber); }
+.adm-btn--danger  { background: #dc2626; color: white; border-color: #dc2626; }
+.adm-btn--danger:hover { background: #b91c1c; }
+.adm-btn--sm { padding: 0.4rem 0.85rem; font-size: 0.68rem; }
 
-.package-info {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-}
+/* Modal */
+.adm-modal-overlay { position: fixed; inset: 0; background: rgba(15,14,12,0.65); display: flex; align-items: flex-start; justify-content: center; z-index: 1000; padding: var(--sp-8); overflow-y: auto; backdrop-filter: blur(3px); }
+.adm-modal { background: var(--linen); border: 1px solid var(--border); width: 100%; max-width: 640px; margin: auto; }
+.adm-modal__header { display: flex; align-items: center; justify-content: space-between; padding: var(--sp-6) var(--sp-8); border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--linen); z-index: 2; }
+.adm-modal__title  { font-family: var(--font-display); font-size: var(--text-2xl); color: var(--onyx); margin: 0; font-weight: 600; }
+.adm-modal__close  { background: none; border: none; cursor: pointer; color: var(--stone); padding: var(--sp-1); transition: color 0.2s ease; }
+.adm-modal__close:hover { color: var(--onyx); }
+.adm-modal__body   { padding: var(--sp-8); }
+.adm-modal__footer { display: flex; gap: var(--sp-3); justify-content: flex-end; padding-top: var(--sp-6); border-top: 1px solid var(--border); margin-top: var(--sp-6); }
+.adm-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); }
+.adm-hint { font-family: var(--font-sans); font-size: var(--text-xs); color: var(--stone); display: block; margin-top: var(--sp-2); }
+.adm-checkbox { display: flex; align-items: center; gap: var(--sp-3); cursor: pointer; font-family: var(--font-sans); font-size: var(--text-sm); color: var(--iron); font-weight: 600; }
+.adm-checkbox input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--amber); cursor: pointer; }
+.adm-upload-zone { border: 1px dashed var(--vellum); background: var(--linen-warm); padding: var(--sp-6); text-align: center; }
+.adm-upload-zone__label { display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); cursor: pointer; color: var(--stone); transition: color 0.2s ease; }
+.adm-upload-zone__label:hover { color: var(--amber); }
+.adm-upload-zone__label span { font-family: var(--font-sans); font-size: var(--text-sm); font-weight: 600; color: var(--amber); letter-spacing: var(--ls-wide); text-transform: uppercase; }
+.adm-upload-zone__preview { display: flex; flex-direction: column; align-items: center; gap: var(--sp-4); }
+.adm-upload-zone__preview img { max-width: 100%; max-height: 240px; border: 1px solid var(--border); display: block; }
+.adm-progress { margin-top: var(--sp-3); }
+.adm-progress__bar { width: 100%; height: 2px; background: var(--border); overflow: hidden; }
+.adm-progress__bar::after { content: ''; display: block; height: 100%; background: var(--amber); animation: progress-anim 1.5s ease-in-out infinite; }
+@keyframes progress-anim { 0%{width:0%;margin-left:0} 50%{width:100%;margin-left:0} 100%{width:0%;margin-left:100%} }
 
-.package-image-thumb {
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 2px solid var(--primary-gold);
-}
-
-.package-image-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.package-details h2 {
-  margin: 0 0 0.5rem 0;
-  color: var(--rich-black);
-}
-
-.package-category {
-  background: var(--primary-gold);
-  color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.package-tagline {
-  margin: 0.5rem 0 0 0;
-  color: var(--text-medium);
-}
-
-.package-actions {
-  display: flex;
-  gap: 0.75rem;
-}
-
-/* Caskets Section */
-.caskets-section {
-  padding: 2rem;
-  background: #fafafa;
-}
-
-.caskets-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.caskets-header h3 {
-  margin: 0;
-  color: var(--primary-gold);
-}
-
-.caskets-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.casket-card {
-  background: white;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: var(--transition);
-}
-
-.casket-card:hover {
-  border-color: var(--primary-gold);
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.casket-image {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-}
-
-.casket-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.casket-image.placeholder {
-  background: #e0e0e0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #999;
-  font-weight: 600;
-}
-
-.casket-details {
-  padding: 1.5rem;
-}
-
-.casket-details h4 {
-  margin: 0 0 0.5rem 0;
-  color: var(--rich-black);
-  font-size: 1.25rem;
-}
-
-.casket-material {
-  display: inline-block;
-  background: var(--cream);
-  color: var(--text-dark);
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-}
-
-.casket-pricing {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  margin: 0.75rem 0;
-}
-
-.price-regular {
-  text-decoration: line-through;
-  color: #999;
-  font-size: 0.95rem;
-}
-
-.price-current {
-  color: var(--primary-gold);
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.casket-specs {
-  font-size: 0.9rem;
-  color: var(--text-light);
-  margin: 0.5rem 0 0 0;
-}
-
-.casket-actions {
-  padding: 1rem 1.5rem;
-  background: #f9f9f9;
-  display: flex;
-  gap: 0.75rem;
-  border-top: 1px solid #e0e0e0;
-}
-
-.no-caskets {
-  text-align: center;
-  padding: 3rem;
-  color: var(--text-medium);
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 2rem;
-  overflow-y: auto;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 8px;
-  max-width: 600px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem 2rem;
-  border-bottom: 2px solid #f0f0f0;
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 10;
-}
-
-.modal-header h2 {
-  margin: 0;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 2rem;
-  cursor: pointer;
-  color: #999;
-  line-height: 1;
-}
-
-.modal-form {
-  padding: 2rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #333;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-family: inherit;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-  outline: none;
-  border-color: var(--primary-gold);
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  cursor: pointer;
-}
-
-.checkbox-label input {
-  width: auto;
-  cursor: pointer;
-}
-
-.image-upload-area {
-  border: 2px dashed #ddd;
-  border-radius: 8px;
-  padding: 1.5rem;
-  text-align: center;
-  background: #fafafa;
-}
-
-.upload-btn {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  background: var(--primary-gold);
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.upload-btn:hover {
-  background: var(--dark-gold);
-}
-
-.image-preview-box img {
-  max-width: 100%;
-  max-height: 300px;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-.upload-progress {
-  margin-top: 0.5rem;
-  color: var(--primary-gold);
-  font-weight: 600;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e0e0e0;
-}
-
-.btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: var(--transition);
-}
-
-.btn-primary {
-  background: var(--primary-gold);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: var(--dark-gold);
-}
-
-.btn-secondary {
-  background: #6c757d;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background: #5a6268;
-}
-
-.btn-danger {
-  background: #dc3545;
-  color: white;
-}
-
-.btn-danger:hover {
-  background: #c82333;
-}
-
-.btn-outline {
-  background: transparent;
-  color: var(--primary-gold);
-  border: 2px solid var(--primary-gold);
-}
-
-.btn-outline:hover {
-  background: var(--primary-gold);
-  color: white;
-}
-
-.btn-sm {
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-}
-
-.loading {
-  text-align: center;
-  padding: 3rem;
-  color: #999;
-}
-
+@media (max-width: 1024px) { .caskets-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 768px) {
-  .package-header-card {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .package-actions {
-    width: 100%;
-    flex-wrap: wrap;
-  }
-
-  .caskets-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .form-row {
-    grid-template-columns: 1fr;
-  }
+  .adm-main { padding: var(--sp-6); }
+  .pkg-card__header { flex-direction: column; align-items: flex-start; }
+  .caskets-grid { grid-template-columns: 1fr; }
+  .adm-form-row { grid-template-columns: 1fr; }
+  .adm-modal__body { padding: var(--sp-6); }
 }
 </style>

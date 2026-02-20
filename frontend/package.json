@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "sitemap": "node generate-sitemap.js",
+    "build:prod": "node generate-sitemap.js && vue-cli-service build"
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^6.3.0",

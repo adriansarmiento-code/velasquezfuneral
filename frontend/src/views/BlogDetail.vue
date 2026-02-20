@@ -2,68 +2,80 @@
   <div>
     <Navbar />
 
-    <div v-if="loading" class="loading-container">
-      <p>Loading blog...</p>
+    <!-- LOADING -->
+    <div v-if="loading" class="page-loader" style="padding-top:calc(73px + 8rem);">
+      <div class="page-loader__ring"></div>
+      <p class="page-loader__text">Loading article...</p>
     </div>
 
-    <div v-else-if="error" class="error-container">
-      <div class="container">
-        <h1>Blog Not Found</h1>
-        <p>{{ error }}</p>
-        <router-link to="/blogs" class="btn btn-primary">Back to Blogs</router-link>
+    <!-- ERROR -->
+    <div v-else-if="error" style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:3rem;padding-top:calc(73px + 3rem);">
+      <div>
+        <p class="overline" style="margin-bottom:1rem">404 · Not Found</p>
+        <h1 class="display-sm" style="margin-bottom:1rem">Blog Not Found</h1>
+        <p class="serif-sm" style="color:var(--iron);margin-bottom:2rem">{{ error }}</p>
+        <router-link to="/blogs" class="btn btn--primary btn--cta">Back to Blogs</router-link>
       </div>
     </div>
 
-    <article v-else-if="blog" class="blog-detail">
-      <!-- Blog Header -->
-      <header class="blog-header">
-        <div class="container">
-          <div class="blog-meta">
-            <span class="blog-author">Published by: {{ blog.publishedBy || 'Velasquez Funeral and Chapel' }}</span>
-            <span class="blog-date">{{ formatDate(blog.createdAt) }}</span>
+    <!-- ARTICLE -->
+    <article v-else-if="blog" class="blog-article-page">
+
+      <!-- HERO HEADER -->
+      <header class="blog-article-header">
+        <div class="container container--sm">
+          <div class="blog-article-header__meta reveal">
+            <span v-if="blog.createdAt" class="label--sm" style="color:var(--stone)">{{ formatDate(blog.createdAt) }}</span>
+            <span class="label--sm c-amber">Published by: {{ blog.publishedBy || 'Velasquez Funeral and Chapel' }}</span>
           </div>
-          <h1 class="blog-title">{{ blog.title }}</h1>
-          <p class="blog-excerpt">{{ blog.excerpt }}</p>
+          <h1 class="display-lg reveal reveal--d1" style="margin-bottom:var(--sp-6);max-width:820px;margin-inline:auto;text-align:center;">
+            {{ blog.title }}
+          </h1>
+          <div class="rule rule--amber rule--medium reveal reveal--d2" style="margin:0 auto var(--sp-8);"></div>
+          <p v-if="blog.excerpt" class="serif-xl reveal reveal--d3" style="color:var(--iron);font-style:italic;text-align:center;max-width:680px;margin-inline:auto;">
+            {{ blog.excerpt }}
+          </p>
         </div>
       </header>
 
-      <!-- Blog Image -->
-      <div class="blog-image-container">
-        <div class="container">
-          <img v-if="blog.image" :src="getImageUrl(blog.image)" :alt="blog.title" class="blog-image">
-          <div v-else class="blog-image-placeholder">📝</div>
-        </div>
+      <!-- HERO IMAGE -->
+      <div v-if="blog.image" class="blog-article-hero-img reveal" style="max-width:1000px;margin-inline:auto;padding-inline:var(--sp-8);margin-bottom:0;">
+        <img :src="getImageUrl(blog.image)" :alt="blog.title" style="width:100%;border:2px solid var(--border);display:block;" />
       </div>
 
-      <!-- Blog Content -->
-      <section class="blog-content-section">
-        <div class="container">
-          <div class="blog-content" v-html="blog.content"></div>
+      <!-- CONTENT BODY -->
+      <section class="section" style="padding-top:var(--sp-20);">
+        <div class="container container--xs">
+          <div class="blog-article-content" v-html="blog.content"></div>
         </div>
       </section>
 
-      <section class="cta-section">
-        <div class="container">
-          <div class="cta-content">
-            <h2>We're Here to Help 24/7</h2>
-            <p>
-              At Velasquez Funeral & Chapel, our compassionate team is available around the clock to guide you through every step of the <strong>funeral planning</strong> process. 
-              As <strong>Cabiao's trusted funeral service provider since 1970</strong>, we offer <strong>affordable funeral packages</strong>, 
-              <strong>professional embalming services</strong>, <strong>burial coordination services</strong>, and <strong>chapel venue for wake</strong> services. 
-              We're honored to serve families in <strong>Cabiao, Nueva Ecija</strong> during their most difficult times.
-            </p>
-            <div class="cta-buttons">
-              <router-link to="/contact" class="btn btn-secondary">Contact Us Anytime</router-link>
-            </div>
-          </div>
+      <!-- CTA STRIP -->
+      <section class="section section--midnight" style="text-align:center;">
+        <div class="container container--sm">
+          <p class="overline reveal" style="margin-bottom:var(--sp-6)">Velasquez Funeral &amp; Chapel</p>
+          <h2 class="display-md c-ivory reveal reveal--d1" style="margin-bottom:var(--sp-8)">
+            We're Here to Help <em class="em-gold">24/7</em>
+          </h2>
+          <p class="serif-body reveal reveal--d2" style="color:rgba(248,244,239,0.82);margin-bottom:var(--sp-12);max-width:680px;margin-inline:auto;">
+            At Velasquez Funeral &amp; Chapel, our compassionate team is available around the clock to guide
+            you through every step of the funeral planning process. As Cabiao's trusted funeral service
+            provider since 1970, we offer affordable funeral packages, professional embalming, burial
+            coordination, and chapel venue services.
+          </p>
+          <router-link to="/contact" class="btn btn--ghost btn--cta reveal reveal--d3">
+            Contact Us Anytime
+          </router-link>
         </div>
       </section>
 
-      <div class="back-to-blogs-container">
-        <div class="container">
-          <router-link to="/blogs" class="btn btn-outline">← Back to All Blogs</router-link>
-        </div>
+      <!-- BACK LINK -->
+      <div class="section section--warm" style="text-align:center;padding-block:var(--sp-16);">
+        <router-link to="/blogs" class="btn btn--ghost-dark btn--cta">
+          ← Back to All Blogs
+        </router-link>
       </div>
+
     </article>
 
     <Footer />
@@ -79,55 +91,51 @@ import seoMeta from '@/mixins/seoMeta'
 export default {
   name: 'BlogDetailPage',
   mixins: [seoMeta],
-  components: {
-    Navbar,
-    Footer
-  },
+  components: { Navbar, Footer },
   data() {
     return {
-      blog: null,
+      blog:    null,
       loading: false,
-      error: null,
-      seoTitle: '',
+      error:   null,
+      seoTitle:       '',
       seoDescription: '',
-      seoKeywords: '',
-      seoImage: ''
+      seoKeywords:    '',
+      seoImage:       ''
     }
   },
-    watch: {
-      blog(newBlog) {
-        if (newBlog) {
-          this.seoTitle = newBlog.title
-          this.seoDescription = newBlog.excerpt
-          this.seoKeywords = `${newBlog.title}, funeral planning, funeral services, Cabiao Nueva Ecija, ${newBlog.publishedBy || 'Velasquez Funeral'}`
-          this.seoImage = newBlog.image || 'https://velasquezfuneral.com/images/funeral-blog.jpg'
-        }
+  watch: {
+    blog(newBlog) {
+      if (newBlog) {
+        this.seoTitle       = newBlog.title
+        this.seoDescription = newBlog.excerpt
+        this.seoKeywords    = `${newBlog.title}, funeral planning, funeral services, Cabiao Nueva Ecija, ${newBlog.publishedBy || 'Velasquez Funeral'}`
+        this.seoImage       = newBlog.image || 'https://velasquezfuneral.com/images/funeral-blog.jpg'
       }
     },
-  mounted() {
-    this.loadBlog()
-  },
-  watch: {
     '$route.params.slug'() {
       this.loadBlog()
     }
   },
+  mounted() {
+    this.loadBlog()
+  },
   methods: {
     async loadBlog() {
       this.loading = true
-      this.error = null
-
+      this.error   = null
       try {
-        const slug = this.$route.params.slug
+        const slug     = this.$route.params.slug
         const response = await api.getBlog(slug)
-        this.blog = response.data.data
+        this.blog      = response.data.data
       } catch (error) {
         console.error('Error loading blog:', error)
         this.error = 'Blog post not found or has been removed.'
       } finally {
         this.loading = false
+        this.$nextTick(() => this.initScrollAnimations())
       }
     },
+
     getImageUrl(url) {
       if (!url) return ''
       if (/^https?:\/\//i.test(url)) return url
@@ -137,184 +145,121 @@ export default {
     },
 
     formatDate(date) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric' }
-      return new Date(date).toLocaleDateString('en-US', options)
+      return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     },
 
     renderContent(content) {
       if (!content) return ''
-      // if content already contains HTML tags, assume it's rich HTML
       if (/</.test(content) && />/.test(content)) return content
-      // otherwise convert simple plaintext line breaks to paragraphs
       return content
         .split('\n\n')
-        .map(paragraph => `<p>${paragraph.replace(/\n/g, '<br>')}</p>`)
+        .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
         .join('')
+    },
+
+    initScrollAnimations() {
+      const reveals = document.querySelectorAll('.reveal')
+      const run = () => {
+        reveals.forEach(el => {
+          if (el.getBoundingClientRect().top < window.innerHeight - 80) el.classList.add('is-visible')
+        })
+      }
+      window.addEventListener('scroll', run, { passive: true })
+      run()
     }
   }
 }
 </script>
 
 <style scoped>
-.loading-container,
-.error-container {
-  min-height: 60vh;
+/* Header zone */
+.blog-article-header {
+  background: linear-gradient(to bottom, var(--bg-warm), var(--bg));
+  padding: calc(73px + var(--sp-20)) 0 var(--sp-20);
+}
+.blog-article-header__meta {
   display: flex;
   align-items: center;
+  gap: var(--sp-6);
   justify-content: center;
-  text-align: center;
-  padding: 3rem;
+  margin-bottom: var(--sp-8);
 }
 
-.blog-header {
-  background: #f8f8f8;
-  padding: 4rem 0 3rem;
+/* Article body — rich text styling */
+.blog-article-content {
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  line-height: 1.9;
+  color: var(--iron);
 }
-
-.blog-detail {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.blog-article-content :deep(p) {
+  margin-bottom: 1.8rem;
 }
-
-.blog-header .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.blog-meta {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-}
-
-.blog-author {
-  color: var(--primary-gold);
+.blog-article-content :deep(h2) {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  color: var(--amber);
   font-weight: 600;
-  font-size: 0.95rem;
-  font-style: italic;
-}
-
-.blog-date {
-  color: #666;
-}
-
-.blog-title {
-  font-size: 2.5rem;
-  color: #1a1a1a;
-  margin: 0 0 1rem 0;
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
   line-height: 1.2;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
 }
-
-.blog-excerpt {
-  font-size: 1.25rem;
-  color: #0a0a0a;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.blog-image-container {
-  padding: 3rem 0;
-  background: white;
-}
-
-.blog-image {
-  width: 100%;
-  max-width: 860px;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
-  display: block;
-  margin: 1.5rem auto;
-}
-
-.blog-image-placeholder {
-  width: 100%;
-  max-width: 860px;
-  height: 320px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4rem;
-  background: #f5f5f5;
-  color: #999;
-  border-radius: 8px;
-  margin: 1.5rem auto;
-}
-
-.blog-content-section {
-  padding: 3rem 0 5rem;
-  background: white;
-}
-
-.blog-content {
-  max-width: 820px;
-  margin: 0 auto;
-  font-size: 1.12rem;
-  line-height: 1.8;
-  color: #0a0a0a;
-}
-
-.blog-content >>> p {
-  margin-bottom: 1.5rem;
-}
-
-.blog-content >>> h2 {
+.blog-article-content :deep(h3) {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+  color: var(--onyx);
+  font-weight: 600;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
-  color: #d4af37;
 }
-
-.blog-content >>> h3 {
+.blog-article-content :deep(h4) {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: var(--onyx);
+  font-weight: 600;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
-  color: #0a0a0a;
 }
-
-
-.blog-content >>> li {
-  margin-bottom: 0.5rem;
+.blog-article-content :deep(ul),
+.blog-article-content :deep(ol) {
+  padding-left: 2rem;
+  margin-bottom: 1.8rem;
+  list-style: revert;
 }
-
-/* Remove or replace the .blog-actions styles with these */
-
-.back-to-blogs-container {
-  text-align: center;
-  margin: 3rem 0 5rem; /* Adds space above and below the button */
+.blog-article-content :deep(li) {
+  margin-bottom: 0.6rem;
+  line-height: 1.75;
 }
-
-/* Ensure the CTA button is prominent */
-.cta-buttons {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: center;
-}
-
-/* Make sure strong tags in the CTA are visible */
-.cta-content p strong {
-  color: var(--soft-cream, #FAF8F3);
+.blog-article-content :deep(strong) {
+  color: var(--onyx);
   font-weight: 700;
 }
-
-/* Adjust CTA padding to match the elegant design */
-.cta-section {
-  padding: 5rem 0;
-  background: #d4af35; /* Matches --rich-black */
+.blog-article-content :deep(em) {
+  color: var(--iron);
 }
-@media (max-width: 768px) {
-  .blog-title {
-    font-size: 2rem;
-  }
-
-  .blog-excerpt {
-    font-size: 1.1rem;
-  }
-
-  .blog-content {
-    font-size: 1rem;
-  }
+.blog-article-content :deep(blockquote) {
+  border-left: 3px solid var(--amber);
+  padding: 1.5rem 2rem;
+  margin: 2.5rem 0;
+  background: var(--bg-warm);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--stone);
+}
+.blog-article-content :deep(img) {
+  max-width: 100%;
+  height: auto;
+  margin: 2rem 0;
+  border: 2px solid var(--border);
+}
+.blog-article-content :deep(a) {
+  color: var(--amber);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.blog-article-content :deep(a:hover) {
+  color: var(--amber-deep);
 }
 </style>

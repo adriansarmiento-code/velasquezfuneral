@@ -2,159 +2,158 @@
   <div>
     <Navbar />
 
-    <!-- Page Header -->
-    <header class="page-header">
-      <div class="container">
-        <h1>Our Story</h1>
-        <p>Over five decades of serving families in Cabiao, Nueva Ecija with dignity, compassion, and unwavering commitment to excellence.</p>
+    <!-- PAGE HERO -->
+    <header class="page-hero-text" style="padding-top:calc(var(--nav-height) + var(--sp-24));padding-bottom:var(--sp-20);">
+      <div class="container container--sm">
+        <p class="overline reveal" style="margin-bottom:var(--sp-6)">Our Story</p>
+        <h1 class="display-lg reveal reveal--d1" style="line-height:var(--lh-tight);margin-bottom:var(--sp-8)">
+          Five Decades of<br>
+          <em class="em-gold">Compassionate Service</em>
+        </h1>
+        <div class="rule rule--amber rule--medium reveal reveal--d2" style="margin-bottom:var(--sp-8)"></div>
+        <p class="serif-lg reveal reveal--d3" style="color:var(--iron);max-width:680px;font-style:italic;">
+          Since 1970, we've been honored to walk alongside Cabiao families through life's most profound moments,
+          offering not just professional services, but genuine human connection when it matters most.
+        </p>
       </div>
     </header>
 
-    <!-- About Content -->
-    <section class="about-main-section">
-      <div class="container">
-        <div class="about-content">
-          
-          <!-- Our History -->
-          <div class="about-section scroll-reveal">
-            <h2>A Legacy of Compassionate Care</h2>
-            <p>Since our establishment in 1970, Velasquez Funeral and Chapel has been the trusted name in funeral services throughout Cabiao, Nueva Ecija. For over fifty years, we've had the honor of serving countless families during their most difficult moments, providing not just professional services, but genuine care and emotional support.</p>
-            <p>What began as a modest funeral service has grown into the longest-standing funeral business in Cabiao, yet our core values remain unchanged: to treat every family with the dignity, respect, and compassion they deserve while honoring the memory of their loved ones with the utmost care.</p>
-          </div>
+    <!-- STORY CHAPTERS -->
+    <section class="section section--warm">
+      <div class="container container--sm">
 
-          <!-- What Makes Us Different -->
-          <div class="about-section scroll-reveal">
-            <h2>What Makes Us Different</h2>
-            <p>Velasquez Funeral and Chapel holds a unique distinction in Cabiao - we are the only funeral service provider with our own dedicated chapel facilities. This allows us to offer families a peaceful, dignified alternative to traditional home-based wake arrangements. Our chapel provides a serene environment where loved ones can gather, reflect, and celebrate the life of the deceased in comfort.</p>
-            <p>With two conveniently located branches in Cabiao, we're always accessible to the families we serve, ensuring that help is never far away when you need it most.</p>
-          </div>
+        <article class="about-chapter reveal" style="margin-bottom:var(--sp-24);padding-bottom:var(--sp-20);border-bottom:1px solid var(--border);">
+          <p class="about-chapter__num">I</p>
+          <h2 class="display-sm" style="margin-bottom:var(--sp-8)">A Legacy of Compassionate Care</h2>
+          <p class="serif-body" style="color:var(--iron);margin-bottom:var(--sp-6);">
+            Since our establishment in 1970, Velasquez Funeral and Chapel has been the trusted name in funeral
+            services throughout Cabiao, Nueva Ecija. For over fifty years, we've had the honor of serving
+            countless families during their most difficult moments, providing not just professional services,
+            but genuine care and emotional support.
+          </p>
+          <p class="serif-sm" style="color:var(--iron);">
+            What began as a modest funeral service has grown into the longest-standing funeral business in
+            Cabiao, yet our core values remain unchanged: to treat every family with the dignity, respect,
+            and compassion they deserve while honoring the memory of their loved ones with the utmost care.
+          </p>
+        </article>
 
-          <!-- Our Leadership -->
-          <div class="about-section scroll-reveal">
-            <h2>Our Leadership</h2>
-            <p>Velasquez Funeral and Chapel is owned by Mario F. Velasquez Jr., who carries forward the family's commitment to excellence in funeral service. Under his ownership and the capable management of Michael C. Soriano, we continue to uphold the traditions of quality care while embracing modern improvements that better serve our community.</p>
-            <p>Our leadership team ensures that every member of our staff is trained to provide not only professional expertise but also the emotional sensitivity that families need during their time of loss.</p>
-          </div>
+        <article class="about-chapter reveal" style="margin-bottom:var(--sp-24);padding-bottom:var(--sp-20);border-bottom:1px solid var(--border);">
+          <p class="about-chapter__num">II</p>
+          <h2 class="display-sm" style="margin-bottom:var(--sp-8)">What Sets Us Apart</h2>
+          <p class="serif-body" style="color:var(--iron);margin-bottom:var(--sp-6);">
+            Velasquez Funeral and Chapel holds a unique distinction in Cabiao — we are the only funeral
+            service provider with our own dedicated chapel facilities.
+          </p>
+          <p class="serif-sm" style="color:var(--iron);">
+            This allows us to offer families a peaceful, dignified alternative to traditional home-based
+            wake arrangements. Our chapel provides a serene environment where loved ones can gather, reflect,
+            and celebrate the life of the deceased in comfort. With two conveniently located branches in
+            Cabiao, we're always accessible to the families we serve.
+          </p>
+        </article>
 
-          <!-- Our Services -->
-          <div class="about-section scroll-reveal">
-            <h2>Complete, Comprehensive Care</h2>
-            <p>We believe in providing complete funeral services that address every aspect of saying goodbye to a loved one. From the moment you first contact us through the final burial, our team handles every detail with professionalism and care:</p>
-            <ul class="services-list">
-              <li>24/7 availability for immediate assistance</li>
-              <li>Professional transportation and delivery to our facility</li>
-              <li>Expert embalming and preparation services</li>
-              <li>Thoughtfully curated casket selection for every budget</li>
-              <li>Complete venue preparation and decoration</li>
-              <li>Comprehensive wake coordination</li>
-              <li>Full burial arrangement and coordination</li>
-              <li>Flexible payment options with installment plans</li>
-            </ul>
-          </div>
-
-          <!-- Our Commitment to Excellence -->
-          <div class="about-section scroll-reveal">
-            <h2>Our Commitment to Excellence</h2>
-            <p>In recent years, we've implemented several modern improvements to enhance the quality of service we provide to families. These include flexible installment payment options beginning with just 30% down payment, a structured system for gathering customer feedback to ensure continuous improvement, and an employee accountability framework that maintains our high professional standards.</p>
-            <p>These enhancements reflect our ongoing commitment to evolving with the needs of the families we serve while maintaining the personal touch that has defined our business for over five decades.</p>
-          </div>
-
-          <!-- Our Mission -->
-          <div class="about-section scroll-reveal">
-            <h2>Our Mission</h2>
-            <p>At Velasquez Funeral and Chapel, our mission is simple yet profound: to provide compassionate, dignified funeral services that honor the memory of the deceased while supporting the healing of those who remain. We understand that every person's life is unique and deserves to be celebrated in a way that reflects their individuality and the love they shared with others.</p>
-            <p>We strive to make a difficult time easier by handling all the details with care, allowing families to focus on what truly matters - remembering, celebrating, and finding comfort in each other.</p>
-          </div>
-
-          <!-- Our Values -->
-          <div class="about-section scroll-reveal">
-            <h2>Our Core Values</h2>
-            <div class="values-grid">
-              <div class="value-card">
-                <div class="value-icon">❤</div>
-                <h3>Compassion</h3>
-                <p>We approach every family with empathy, kindness, and genuine care for their emotional wellbeing.</p>
-              </div>
-              <div class="value-card">
-                <div class="value-icon">⚖</div>
-                <h3>Integrity</h3>
-                <p>We conduct our business with honesty, transparency, and ethical practices in all we do.</p>
-              </div>
-              <div class="value-card">
-                <div class="value-icon">⭐</div>
-                <h3>Excellence</h3>
-                <p>We maintain the highest professional standards in every service we provide.</p>
-              </div>
-              <div class="value-card">
-                <div class="value-icon">🙏</div>
-                <h3>Respect</h3>
-                <p>We treat every person with dignity and honor the memory of each life we help celebrate.</p>
-              </div>
+        <article class="about-chapter reveal">
+          <p class="about-chapter__num">III</p>
+          <h2 class="display-sm" style="margin-bottom:var(--sp-10)">Leadership &amp; Vision</h2>
+          <div class="about-leaders">
+            <div class="about-leader reveal reveal--d1">
+              <div class="about-leader__initial">MV</div>
+              <h3 class="display-xs" style="margin-bottom:var(--sp-2);">Mario F. Velasquez Jr.</h3>
+              <p class="label c-amber" style="margin-bottom:var(--sp-4);">Owner</p>
+              <p class="serif-sm" style="color:var(--iron);">
+                Carrying forward the family's commitment to excellence in funeral service with unwavering
+                dedication to our community.
+              </p>
+            </div>
+            <div class="about-leader reveal reveal--d2">
+              <div class="about-leader__initial">MS</div>
+              <h3 class="display-xs" style="margin-bottom:var(--sp-2);">Michael C. Soriano</h3>
+              <p class="label c-amber" style="margin-bottom:var(--sp-4);">Manager</p>
+              <p class="serif-sm" style="color:var(--iron);">
+                Ensuring every member of our team provides professional expertise and emotional sensitivity
+                that families need.
+              </p>
             </div>
           </div>
+          <p class="serif-sm" style="color:var(--iron);margin-top:var(--sp-10);">
+            Under their guidance, we continue to uphold traditions of quality care while embracing modern
+            improvements that better serve our community.
+          </p>
+        </article>
 
- <!-- Our Timeline -->
-<div class="about-section scroll-reveal">
-  <h2>Our Journey</h2>
-  <div class="timeline">
-    <div class="timeline-item">
-      <div class="timeline-content">
-        <h3>1970</h3>
-        <p>Velasquez Funeral and Chapel was established in Cabiao, Nueva Ecija, beginning our journey of serving the community with compassionate funeral care.</p>
       </div>
-    </div>
-    
-    <div class="timeline-item">
-      <div class="timeline-content">
-        <h3>1980s-1990s</h3>
-        <p>Through dedication and commitment to excellence, we became known throughout the region as a trusted provider of funeral services, building lasting relationships with families.</p>
-      </div>
-    </div>
-    
-    <div class="timeline-item">
-      <div class="timeline-content">
-        <h3>2000s</h3>
-        <p>We expanded to our second location in Cabiao and introduced our chapel facilities, becoming the only funeral service in the area to offer dedicated chapel venues for wakes and services.</p>
-      </div>
-    </div>
-    
-    <div class="timeline-item">
-      <div class="timeline-content">
-        <h3>2010s</h3>
-        <p>Under the leadership of Mario F. Velasquez Jr. and management of Michael C. Soriano, we modernized our operations while maintaining our core values of compassion and excellence.</p>
-      </div>
-    </div>
-    
-    <div class="timeline-item">
-      <div class="timeline-content">
-        <h3>2020-Present</h3>
-        <p>We continue to evolve, implementing flexible payment options, customer feedback systems, and enhanced service offerings while remaining true to our mission of serving families with dignity and care.</p>
-      </div>
-    </div>
-  </div>
-</div>
+    </section>
 
-          <!-- Community Commitment -->
-          <div class="about-section scroll-reveal">
-            <h2>Committed to Our Community</h2>
-            <p>As the longest-standing funeral service in Cabiao, we're deeply rooted in this community. Many of the families we serve today are the children and grandchildren of families we served decades ago. This multi-generational trust is something we never take for granted.</p>
-            <p>We're not just a business in Cabiao - we're part of the community's fabric, sharing in its joys and sorrows, and committed to serving our neighbors for many generations to come.</p>
+    <!-- SERVICES LIST -->
+    <section class="section">
+      <div class="container container--sm">
+        <div class="reveal" style="margin-bottom:var(--sp-16)">
+          <p class="overline" style="margin-bottom:var(--sp-4)">Everything We Offer</p>
+          <h2 class="display-md" style="margin-bottom:var(--sp-6)">Complete, Comprehensive Care</h2>
+          <p class="serif-lg" style="color:var(--iron);font-style:italic;">
+            From the moment you first contact us through the final burial, our team handles every detail.
+          </p>
+        </div>
+
+        <div class="about-services reveal">
+          <div v-for="item in services" :key="item" class="about-service-item">
+            <svg class="about-service-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span class="serif-sm" style="color:var(--iron);">{{ item }}</span>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
+    <!-- CORE VALUES -->
+    <section class="section section--deep">
       <div class="container">
-        <div class="cta-content">
-          <h2>Experience the Velasquez Difference</h2>
-          <p>Let our decades of experience and commitment to compassionate care serve your family. We're here 24/7 to provide the support and guidance you need.</p>
-          <div class="cta-buttons">
-            <router-link to="/contact" class="btn btn-primary">Contact Us Today</router-link>
-            <router-link to="/packages" class="btn btn-outline">View Our Services</router-link>
+        <div class="reveal" style="text-align:center;margin-bottom:var(--sp-20)">
+          <p class="overline" style="margin-bottom:var(--sp-4)">What Guides Us</p>
+          <h2 class="display-md">Our Core Values</h2>
+        </div>
+        <div class="about-values">
+          <div v-for="v in values" :key="v.title" class="about-value reveal">
+            <div class="about-value__icon" v-html="v.icon"></div>
+            <h3 class="display-xs" style="margin-bottom:var(--sp-4)">{{ v.title }}</h3>
+            <p class="serif-sm" style="color:var(--iron);">{{ v.text }}</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIMELINE — replaced with new design -->
+    <section class="section timeline">
+      <div class="container container--tight">
+        <div class="reveal" style="margin-bottom:var(--sp-16)">
+          <p class="label c-amber" style="margin-bottom:var(--sp-4)">Our Journey</p>
+          <h2 class="display-sm">Milestones</h2>
+        </div>
+        <div class="timeline__track">
+          <div class="timeline__item reveal" v-for="(m, i) in milestones" :key="i" :class="`reveal--d${(i % 3) + 1}`">
+            <div class="timeline__year">{{ m.year }}</div>
+            <div class="timeline__bar"></div>
+            <div class="timeline__content">
+              <h4 class="timeline__title">{{ m.title }}</h4>
+              <p class="timeline__text">{{ m.text }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section section--deep about-cta">
+      <div class="container about-cta__inner reveal">
+        <div>
+          <h2 class="display-sm">Ready to Talk?</h2>
+          <p class="serif-sm" style="color:var(--text-muted);margin-top:var(--sp-4)">We're available 24/7. No pressure, no obligation — just compassionate support.</p>
+        </div>
+        <div style="display:flex;gap:var(--sp-4);flex-wrap:wrap">
+          <router-link to="/contact" class="btn btn--primary btn--cta">Contact Us</router-link>
+          <router-link to="/packages" class="btn btn--secondary btn--cta">View Packages</router-link>
         </div>
       </div>
     </section>
@@ -167,235 +166,251 @@
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import seoMeta from '@/mixins/seoMeta'
+import { useReveal, useParallax } from '@/mixins/animations'
 
 export default {
   name: 'AboutPage',
   mixins: [seoMeta],
-  components: {
-    Navbar,
-    Footer
-  },
+  components: { Navbar, Footer },
   data() {
     return {
-      seoTitle: 'About Us - 50+ Years Serving Cabiao Families',
-      seoDescription: 'Learn about Velasquez Funeral and Chapel, Cabiao\'s longest-standing funeral service provider since 1970. Owned by Mario F. Velasquez Jr., managed by Michael C. Soriano. We\'re the only funeral home in Cabiao with dedicated chapel facilities.',
-      seoKeywords: 'Velasquez Funeral Chapel, funeral home Cabiao history, Mario Velasquez funeral, longest funeral service Cabiao, chapel facility Nueva Ecija, funeral service experience',
-      seoImage: 'https://velasquezfuneral.com/images/velasquez-about.jpg'
+      seoTitle: 'About Us — Five Decades of Compassionate Service',
+      seoDescription: "Learn about Velasquez Funeral and Chapel's 50-year history of serving Cabiao, Nueva Ecija families with dignity, compassion, and professional excellence.",
+      seoKeywords: 'about Velasquez funeral Cabiao, funeral home history Nueva Ecija, funeral services Philippines',
+      seoImage: 'https://velasquezfuneral.com/images/velasquez-about-og.jpg',
+      cleanupParallax: null,
+
+      services: [
+        '24/7 availability for immediate assistance',
+        'Professional transportation and delivery to our facility',
+        'Expert embalming and preparation services',
+        'Thoughtfully curated casket selection for every budget',
+        'Complete venue preparation and decoration',
+        'Comprehensive wake coordination',
+        'Full burial arrangement and coordination',
+        'Flexible payment options with installment plans',
+      ],
+
+      values: [
+        {
+          title: 'Compassion',
+          text:  'We approach every family with empathy, kindness, and genuine care for their emotional wellbeing during their time of grief.',
+          icon:  '<svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>'
+        },
+        {
+          title: 'Integrity',
+          text:  'We conduct our business with honesty, transparency, and ethical practices in all interactions and decisions.',
+          icon:  '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>'
+        },
+        {
+          title: 'Excellence',
+          text:  'We maintain the highest professional standards in every service we provide, constantly improving our practices.',
+          icon:  '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>'
+        },
+        {
+          title: 'Respect',
+          text:  'We treat every person with dignity and honor the memory of each life we help celebrate with utmost reverence.',
+          icon:  '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>'
+        },
+      ],
+
+      milestones: [
+        { year: '1970', title: 'Founded', text: 'Velasquez Funeral and Chapel opens its doors in Cabiao, Nueva Ecija, beginning a legacy of compassionate service.' },
+        { year: '1985', title: 'Chapel Established', text: 'We become the first and only funeral home in Cabiao to open dedicated chapel facilities for wake services.' },
+        { year: '2000', title: 'Second Branch', text: 'Growing community trust leads us to open a second branch to better serve families across Cabiao.' },
+        { year: '2010', title: 'Expanding Services', text: 'Introduction of comprehensive add-on services including memorial videos, floral arrangements, and custom tributes.' },
+        { year: '2020', title: '50 Years of Service', text: 'Celebrating five decades of serving Cabiao families with dignity, compassion, and professional excellence.' },
+        { year: 'Today', title: 'Still Here for You', text: '24 hours a day, 7 days a week, our compassionate team continues to walk alongside Cabiao families in their time of need.' }
+      ]
     }
   },
   mounted() {
-    this.initScrollAnimations()
+    useReveal()
+    this.cleanupParallax = useParallax()
   },
-  methods: {
-    initScrollAnimations() {
-      const reveals = document.querySelectorAll('.scroll-reveal')
-      
-      const revealOnScroll = () => {
-        reveals.forEach(element => {
-          const elementTop = element.getBoundingClientRect().top
-          const windowHeight = window.innerHeight
-          
-          if (elementTop < windowHeight - 100) {
-            element.classList.add('revealed')
-          }
-        })
-      }
-      
-      window.addEventListener('scroll', revealOnScroll)
-      revealOnScroll()
-    }
+  beforeUnmount() {
+    if (this.cleanupParallax) this.cleanupParallax()
   }
 }
 </script>
 
 <style scoped>
-.about-main-section {
-  padding: 5rem 0;
-  background: var(--white);
+/* ── About-specific layout components ───────────────── */
+
+.about-chapter { position: relative; }
+.about-chapter:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.about-chapter__num {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 8vw, 6rem);
+  color: var(--amber); opacity: 0.12;
+  font-style: italic; line-height: 1;
+  margin-bottom: var(--sp-4);
+  pointer-events: none; user-select: none;
 }
 
-.about-content {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.about-section {
-  margin-bottom: 4rem;
-  padding-bottom: 3rem;
-  border-bottom: 2px solid var(--medium-gray);
-}
-
-.about-section:last-child {
-  border-bottom: none;
-}
-
-.about-section h2 {
-  font-size: 2.25rem;
-  color: var(--primary-gold);
-  margin-bottom: 1.5rem;
-  font-family: var(--font-heading);
-}
-
-.about-section p {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
-  color: var(--text-medium);
-}
-
-.services-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 1.5rem;
-}
-
-.services-list li {
-  padding: 1rem 0;
-  padding-left: 2rem;
-  position: relative;
-  border-bottom: 1px solid var(--medium-gray);
-  font-size: 1.05rem;
-  color: var(--text-dark);
-}
-
-.services-list li:last-child {
-  border-bottom: none;
-}
-
-.services-list li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  color: var(--primary-gold);
-  font-weight: bold;
-  font-size: 1.3rem;
-}
-
-/* Values Grid */
-.values-grid {
+.about-leaders {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmin(250px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-8);
 }
 
-.value-card {
-  background: var(--cream);
-  padding: 2rem;
+.about-leader {
+  padding: var(--sp-10) var(--sp-8);
+  border: 1px solid var(--border);
+  background: var(--bg-warm);
   text-align: center;
-  border: 2px solid var(--border-color);
-  transition: var(--transition);
+  transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
 }
-
-.value-card:hover {
-  border-color: var(--primary-gold);
-  transform: translateY(-5px);
+.about-leader:hover {
+  transform: translateY(-6px);
   box-shadow: var(--shadow-md);
+  border-color: var(--amber);
 }
 
-.value-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.value-card h3 {
-  font-size: 1.5rem;
-  color: var(--rich-black);
-  margin-bottom: 1rem;
-}
-
-.value-card p {
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--text-medium);
-}
-
-/* Timeline - Simple Clean Design */
-.timeline {
-  position: relative;
-  padding: 2rem 0 2rem 4rem;
-  margin-top: 2rem;
-}
-
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 26px;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: var(--primary-gold);
-}
-
-.timeline-item {
-  position: relative;
-  margin-bottom: 3rem;
-  padding-left: 3rem;
-}
-
-.timeline-item:last-child {
-  margin-bottom: 0;
-}
-
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: -28px;
-  top: 8px;
-  width: 20px;
-  height: 20px;
-  background: var(--primary-gold);
-  border: 4px solid var(--white);
+.about-leader__initial {
+  width: 72px; height: 72px;
+  margin: 0 auto var(--sp-6);
+  border: 2px solid var(--amber);
   border-radius: 50%;
-  box-shadow: 0 0 0 2px var(--primary-gold);
-  z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 1.6rem;
+  font-weight: 600; color: var(--amber);
 }
 
-.timeline-year {
-  display: none;
+/* Services checklist */
+.about-services {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4) var(--sp-8);
+}
+.about-service-item {
+  display: flex; align-items: flex-start; gap: var(--sp-4);
+  padding: var(--sp-5);
+  border-left: 2px solid var(--amber);
+  background: var(--bg-warm);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.about-service-item:hover { background: var(--bg-deep); }
+.about-service-check { color: var(--amber); flex-shrink: 0; margin-top: 0.2rem; }
+
+/* Values grid */
+.about-values {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-8);
+}
+.about-value {
+  padding: var(--sp-10) var(--sp-8);
+  border: 1px solid var(--border);
+  transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+}
+.about-value:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: var(--amber); }
+.about-value__icon { color: var(--amber); margin-bottom: var(--sp-6); }
+
+/* ── TIMELINE — new design ───────────────────────────── */
+.container--tight { max-width: 900px; }
+
+.timeline__track {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+.timeline__track::before {
+  content: '';
+  position: absolute;
+  left: 120px;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--amber), transparent);
 }
 
-.timeline-content h3 {
-  font-size: 1.75rem;
-  color: var(--rich-black);
-  margin-bottom: 1rem;
-  font-family: var(--font-heading);
+.timeline__item {
+  display: grid;
+  grid-template-columns: 120px 1px 1fr;
+  gap: 0 var(--sp-8);
+  align-items: flex-start;
+  padding-bottom: var(--sp-12);
+  position: relative;
+}
+.timeline__item:last-child { padding-bottom: 0; }
+
+.timeline__year {
+  font-family: var(--font-elegant);
+  font-size: var(--text-sm);
   font-weight: 600;
+  letter-spacing: var(--ls-wider);
+  color: var(--amber);
+  text-align: right;
+  padding-top: 0.2rem;
+  padding-right: var(--sp-6);
 }
 
-.timeline-content p {
-  margin: 0;
-  font-size: 1.05rem;
+.timeline__bar {
+  width: 1px;
+  background: var(--amber);
+  position: relative;
+  align-self: stretch;
+}
+.timeline__bar::before {
+  content: '';
+  position: absolute;
+  top: 0.3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px; height: 10px;
+  background: var(--amber);
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--amber);
+}
+
+.timeline__content {
+  padding-left: var(--sp-6);
+  padding-bottom: var(--sp-8);
+  border-bottom: 1px solid var(--border);
+}
+.timeline__item:last-child .timeline__content { border-bottom: none; padding-bottom: 0; }
+
+.timeline__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-3);
+  line-height: var(--lh-snug);
+}
+.timeline__text {
+  font-family: var(--font-serif);
+  font-size: clamp(0.95rem, 1.3vw, 1.05rem);
   line-height: 1.8;
-  color: var(--text-medium);
+  color: var(--text-body);
 }
 
+/* CTA section */
+.about-cta__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-12);
+  flex-wrap: wrap;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .timeline {
-    padding-left: 3rem;
-  }
-
-  .timeline::before {
-    left: 20px;
-  }
-
-  .timeline-item {
-    padding-left: 2rem;
-  }
-
-  .timeline-item::before {
-    left: -22px;
-    width: 16px;
-    height: 16px;
-  }
-
-  .timeline-content h3 {
-    font-size: 1.5rem;
-  }
-
-  .values-grid {
-    grid-template-columns: 1fr;
-  }
+  .about-leaders { grid-template-columns: 1fr; }
+  .about-services { grid-template-columns: 1fr; }
+  .about-values   { grid-template-columns: 1fr; }
+  .timeline__track::before { left: 80px; }
+  .timeline__item { grid-template-columns: 80px 1px 1fr; }
+  .about-cta__inner { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 480px) {
+  .timeline__track::before { display: none; }
+  .timeline__item { grid-template-columns: 1fr; gap: var(--sp-2); }
+  .timeline__bar { display: none; }
+  .timeline__year { text-align: left; padding-right: 0; }
+  .timeline__content { padding-left: 0; }
 }
 </style>
