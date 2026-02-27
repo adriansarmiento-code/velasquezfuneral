@@ -112,13 +112,14 @@ export default {
     return {
       blogs:   [],
       loading: false,
-      seoTitle:       'Funeral Planning Guides & Resources',
-      seoDescription: 'Helpful articles and guides about funeral planning, etiquette, burial services, and grief support.',
+      seoTitle:       'Funeral Planning Guides & Resources | Cabiao, Nueva Ecija',
+      seoDescription: 'Helpful articles on funeral planning, burial services, and grief support from Velasquez Funeral & Chapel in Cabiao, Nueva Ecija.',
       seoKeywords:    'funeral planning guide, funeral etiquette Philippines, burial planning, grief support, memorial service ideas',
       seoImage:       'https://velasquezfuneral.com/images/funeral-blog.jpg',
     }
   },
   mounted() {
+    this.$nextTick(() => this.initScrollAnimations())
     this.loadBlogs()
   },
   methods: {

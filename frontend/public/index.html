@@ -62,6 +62,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
+  <!-- Preload hero image — tells browser to fetch LCP image immediately -->
+  <link rel="preload" as="image" href="/images/interior.jpg" fetchpriority="high">
+
   <!-- Primary Meta Tags -->
   <title>Velasquez Funeral and Chapel | Compassionate Funeral Services in Cabiao, Nueva Ecija Since 1970</title>
   <meta name="title" content="Velasquez Funeral and Chapel | Compassionate Funeral Services in Cabiao, Nueva Ecija">
@@ -106,9 +109,168 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://velasquez-funeral-api.onrender.com">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Cinzel:wght@400;500;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Fonts: Lato (UI/sans) loaded first — used in navbar which is always visible -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap"></noscript>
 
+  <!-- Display fonts: loaded non-blocking — fallbacks handle initial render -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"></noscript>
+
+  <!-- ── Structured Data / Schema.org ─────────────────────── -->
+
+  <!-- 1. WebSite — enables Google Sitelinks Search Box -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Velasquez Funeral and Chapel",
+    "url": "https://velasquezfuneral.com",
+    "description": "Compassionate funeral services in Cabiao, Nueva Ecija since 1970.",
+    "inLanguage": "en-PH",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Velasquez Funeral and Chapel",
+      "url": "https://velasquezfuneral.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://velasquezfuneral.com/images/velasquez-funeral-logo.jpg"
+      }
+    }
+  }
+  </script>
+
+  <!-- 2. FuneralHome LocalBusiness — primary rich result -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["LocalBusiness", "FuneralHome"],
+    "name": "Velasquez Funeral and Chapel",
+    "alternateName": "Velasquez Funeral Chapel",
+    "image": [
+      "https://velasquezfuneral.com/images/velasquez-funeral-logo.jpg",
+      "https://velasquezfuneral.com/images/velasquez-funeral-og.jpg"
+    ],
+    "description": "Compassionate funeral services in Cabiao, Nueva Ecija since 1970. Complete funeral packages, chapel services, burial coordination, and flexible payment plans. Available 24/7.",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Jose Abad Santos Ave",
+      "addressLocality": "Cabiao",
+      "addressRegion": "Nueva Ecija",
+      "postalCode": "3107",
+      "addressCountry": "PH"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 15.2544,
+      "longitude": 120.8602
+    },
+    "hasMap": "https://maps.google.com/?q=15.2544,120.8602",
+    "url": "https://velasquezfuneral.com",
+    "telephone": ["+639206609999", "+639150980496"],
+    "openingHours": "Mo,Tu,We,Th,Fr,Sa,Su 00:00-23:59",
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+      "opens": "00:00",
+      "closes": "23:59"
+    },
+    "priceRange": "₱₱",
+    "currenciesAccepted": "PHP",
+    "paymentAccepted": "Cash, Installment",
+    "areaServed": [
+      { "@type": "City", "name": "Cabiao" },
+      { "@type": "AdministrativeArea", "name": "Nueva Ecija" }
+    ],
+    "serviceArea": {
+      "@type": "AdministrativeArea",
+      "name": "Nueva Ecija, Philippines"
+    },
+    "foundingDate": "1970",
+    "slogan": "Every Life Tells a Story Worth Honoring",
+    "sameAs": [
+      "https://www.facebook.com/people/Velasquez-Funeral-and-Chapel/100066363175090/"
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Funeral Service Packages",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Basic Funeral Package",
+            "description": "Essential funeral services with dignified care for your loved one."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Semi-Elegant Funeral Package",
+            "description": "Enhanced funeral services with additional personalization options."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Elegant Funeral Package",
+            "description": "Premium funeral services with full personalization and premium casket selection."
+          }
+        }
+      ]
+    }
+  }
+  </script>
+
+  <!-- 3. BreadcrumbList — helps Google understand site structure -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://velasquezfuneral.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Funeral Packages",
+        "item": "https://velasquezfuneral.com/packages"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Blogs",
+        "item": "https://velasquezfuneral.com/blogs"
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": "Add-Ons",
+        "item": "https://velasquezfuneral.com/add-ons"
+      },
+      {
+        "@type": "ListItem",
+        "position": 5,
+        "name": "About Us",
+        "item": "https://velasquezfuneral.com/about"
+      },
+      {
+        "@type": "ListItem",
+        "position": 6,
+        "name": "Contact",
+        "item": "https://velasquezfuneral.com/contact"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <noscript>

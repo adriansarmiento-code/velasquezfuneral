@@ -13,7 +13,7 @@
       <!-- Background photo layer -->
       <div class="hero__canvas parallax-wrap">
         <div class="img-ph img-ph--dark hero__canvas-img parallax-img">
-          <img src="/images/interior.jpg" alt="Chapel interior" class="hero__canvas-img parallax-img" />
+          <img src="/images/interior.jpg" alt="Chapel interior" class="hero__canvas-img parallax-img" width="1920" height="1080" fetchpriority="high" decoding="async" />
         </div>
         <!-- Gradient: heavy bottom, lighter top -->
         <div class="hero__veil"></div>
@@ -105,7 +105,7 @@
         <div class="overture__text">
           <p class="overture__eyebrow overline reveal">We Understand</p>
           <h2 class="overture__heading display-md reveal reveal--d1">
-            This Moment<br>is Overwhelming.
+            This Moment<br><span style="white-space:nowrap">is Overwhelming.</span>
           </h2>
 
           <div class="overture__body">
@@ -134,7 +134,7 @@
           <div class="overture__frame reveal reveal--right reveal--d2">
             <div class="overture__frame-border" aria-hidden="true"></div>
             <div class="img-ph overture__img">
-              <img src="/images/moment.jpg" alt="A moment of gentle farewell" class="overture__img-img" />
+              <img src="/images/moment.jpg" alt="A moment of gentle farewell" class="overture__img-img" width="800" height="1073" loading="lazy" decoding="async" />
             </div>
           </div>
           <p class="caption overture__caption reveal reveal--d3">
@@ -154,7 +154,7 @@
     ══════════════════════════════════════════════════════════ -->
     <section class="testimony">
       <div class="testimony__bg parallax-wrap">
-<img src="/images/testimony.jpeg" alt="Testimonial of a family's experience with Velasquez Funeral Home" class="testimony__bg-img" />
+<img src="/images/testimony.jpeg" alt="Testimonial of a family's experience with Velasquez Funeral Home" class="testimony__img" width="800" height="422" loading="lazy" decoding="async" />
         <div class="testimony__veil"></div>
       </div>
 
@@ -313,7 +313,7 @@
           <!-- Main tall image -->
           <div class="showcase__main reveal reveal--left reveal--d1">
             <div class="img-ph img-ph--stone showcase__main-img">
-              <img src="/images/showcase.png" alt="Premium casket showcase" class="showcase__main-img-img" />
+              <img src="/images/showcase.png" alt="Premium casket showcase" class="showcase__main-img-img" width="800" height="1061" loading="lazy" decoding="async" />
             </div>
             <div class="showcase__main-caption">
               <span class="label--sm c-amber" style="margin-bottom:0.25rem;display:block">Featured</span>
@@ -325,12 +325,12 @@
           <div class="showcase__stack">
             <div class="showcase__stack-item reveal reveal--right reveal--d2">
               <div class="img-ph img-ph--stone showcase__stack-img">
-                <img src="/images/detail.png" alt="Casket detail view" class="showcase__stack-img-img" />
+                <img src="/images/detail.png" alt="Casket detail view" class="showcase__stack-img-img" width="800" height="533" loading="lazy" decoding="async" />
               </div>
             </div>
             <div class="showcase__stack-item reveal reveal--right reveal--d3">
               <div class="img-ph img-ph--stone showcase__stack-img">
-                <img src="/images/casketinterior.png" alt="Casket interior view" class="showcase__stack-img-img" />
+                <img src="/images/casketinterior.png" alt="Casket interior view" class="showcase__stack-img-img" width="800" height="533" loading="lazy" decoding="async" />
               </div>
             </div>
           </div>
@@ -354,7 +354,7 @@
     <div class="split">
 
       <div class="split__photo parallax-wrap">
-<img src="/images/hearse.jpg" alt="Professional hearse transport vehicle" class="split__photo-img" />
+<img src="/images/hearse.jpg" alt="Professional hearse transport vehicle" class="split__photo-img" width="1200" height="800" loading="lazy" decoding="async" />
       </div>
 
       <div class="split__panel">
@@ -545,7 +545,6 @@ export default {
   mounted() {
     useReveal()
     this._cleanupParallax = useParallax()
-    this._addStructuredData()
   },
 
   beforeUnmount() {
@@ -553,27 +552,6 @@ export default {
   },
 
   methods: {
-    _addStructuredData() {
-      const s = document.createElement('script')
-      s.type = 'application/ld+json'
-      s.text = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'FuneralHome',
-        name: 'Velasquez Funeral and Chapel',
-        description: 'Compassionate funeral services in Cabiao, Nueva Ecija since 1970.',
-        address: {
-          '@type': 'PostalAddress',
-          streetAddress: '7V36+M7C, Jose Abad Santos Ave',
-          addressLocality: 'Cabiao',
-          addressRegion: 'Nueva Ecija',
-          addressCountry: 'PH'
-        },
-        telephone: ['+639206609999', '+639150980496'],
-        openingHours: 'Mo,Tu,We,Th,Fr,Sa,Su 00:00-23:59',
-        foundingDate: '1970'
-      })
-      document.head.appendChild(s)
-    }
   }
 }
 </script>
@@ -756,7 +734,7 @@ export default {
 }
 
 .overture__eyebrow { margin-bottom: var(--sp-6); }
-.overture__heading { margin-bottom: var(--sp-10); color: var(--text-primary); }
+.overture__heading { margin-bottom: var(--sp-10); color: var(--text-primary); overflow-wrap: normal; word-break: normal; hyphens: none; }
 
 .overture__body { margin-bottom: var(--sp-8); }
 .overture__para { color: var(--text-body); margin-bottom: var(--sp-6); }
@@ -804,7 +782,7 @@ export default {
   overflow: hidden;
 }
 .testimony__bg { position: absolute; inset: 0; }
-.testimony__img { width: 100%; height: 100%; min-height: 80vh; }
+.testimony__img { width: 100%; height: 100%; min-height: 80vh; object-fit: cover; object-position: center; display: block; }
 .testimony__veil {
   position: absolute; inset: 0;
   background: linear-gradient(

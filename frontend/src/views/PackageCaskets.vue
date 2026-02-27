@@ -159,16 +159,21 @@
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import api from '@/services/api'
+import seoMeta from '@/mixins/seoMeta'
 
 export default {
   name: 'PackageCasketsPage',
+  mixins: [seoMeta],
   components: { Navbar, Footer },
   data() {
     return {
       caskets:     [],
       packageInfo: null,
       packageName: '',
-      loading:     false
+      loading:     false,
+      seoTitle:       'Funeral Casket Options in Cabiao, Nueva Ecija — Velasquez',
+      seoDescription: 'Browse our casket selection for each funeral package. Quality caskets available in Cabiao, Nueva Ecija at Velasquez Funeral & Chapel.',
+      seoKeywords:    'funeral caskets Cabiao, casket options Nueva Ecija, funeral packages Philippines'
     }
   },
   mounted() {
@@ -184,7 +189,11 @@ export default {
         const packagesResponse = await api.getPackages()
         const allPackages      = packagesResponse.data.data
         this.packageInfo       = allPackages.find(p => p._id === packageId)
-        if (this.packageInfo) this.packageName = this.packageInfo.name
+        if (this.packageInfo) {
+          this.packageName = this.packageInfo.name
+          this.seoTitle = `${this.packageInfo.name} Caskets — Velasquez Funeral, Cabiao`
+          this.seoDescription = `View casket options for the ${this.packageInfo.name} funeral package at Velasquez Funeral & Chapel in Cabiao, Nueva Ecija.`
+        }
 
         // Load caskets
         const casketsResponse = await api.getCasketsByPackage(packageId)
@@ -261,7 +270,7 @@ export default {
 .pkg-summary__features {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: var(--sp-2);
+  gap: var(--sp-3);
   list-style: none;
   padding: 0;
 }

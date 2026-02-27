@@ -158,6 +158,7 @@ export default {
     }
   },
   mounted() {
+    this.$nextTick(() => this.initScrollAnimations())
     this.loadPackages()
   },
   methods: {

@@ -154,8 +154,8 @@ export default {
     return {
       addons:  [],
       loading: false,
-      seoTitle:       'Additional Funeral Services - Personalize Your Tribute',
-      seoDescription: 'Enhance your funeral service with memorial videos, photography, floral arrangements, custom programs, and more.',
+      seoTitle:       'Additional Funeral Services in Cabiao, Nueva Ecija - Velasquez',
+      seoDescription: 'Balloon releases, dove releases, memorial videos, and more. Add-on services to personalize your tribute in Cabiao, Nueva Ecija.',
       seoKeywords:    'memorial video, funeral photography, floral arrangements funeral, memorial programs, personalized funeral services',
       seoImage:       'https://velasquezfuneral.com/images/funeral-addons.jpg',
 
@@ -185,6 +185,7 @@ export default {
     }
   },
   mounted() {
+    this.$nextTick(() => this.initScrollAnimations())
     this.loadAddOns()
   },
   methods: {

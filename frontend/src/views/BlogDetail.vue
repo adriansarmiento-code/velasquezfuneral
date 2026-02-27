@@ -26,7 +26,7 @@
         <div class="container container--sm">
           <div class="blog-article-header__meta reveal">
             <span v-if="blog.createdAt" class="label--sm" style="color:var(--stone)">{{ formatDate(blog.createdAt) }}</span>
-            <span class="label--sm c-amber">Published by: {{ blog.publishedBy || 'Velasquez Funeral and Chapel' }}</span>
+            <span v-if="blog.publishedBy" class="label--sm c-amber">{{ blog.publishedBy }}</span>
           </div>
           <h1 class="display-lg reveal reveal--d1" style="margin-bottom:var(--sp-6);max-width:820px;margin-inline:auto;text-align:center;">
             {{ blog.title }}
@@ -108,8 +108,9 @@ export default {
       if (newBlog) {
         this.seoTitle       = newBlog.title
         this.seoDescription = newBlog.excerpt
-        this.seoKeywords    = `${newBlog.title}, funeral planning, funeral services, Cabiao Nueva Ecija, ${newBlog.publishedBy || 'Velasquez Funeral'}`
+        this.seoKeywords    = `${newBlog.title}, funeral planning, funeral services Cabiao, funeral home Nueva Ecija, ${newBlog.publishedBy || 'Velasquez Funeral'}`
         this.seoImage       = newBlog.image || 'https://velasquezfuneral.com/images/funeral-blog.jpg'
+        this.injectArticleSchema(newBlog)
       }
     },
     '$route.params.slug'() {
@@ -118,6 +119,12 @@ export default {
   },
   mounted() {
     this.loadBlog()
+  },
+
+  beforeUnmount() {
+    // Remove dynamically injected article schema so it doesn't persist on other pages
+    const el = document.getElementById('article-schema')
+    if (el) el.remove()
   },
   methods: {
     async loadBlog() {
@@ -134,6 +141,52 @@ export default {
         this.loading = false
         this.$nextTick(() => this.initScrollAnimations())
       }
+    },
+
+    injectArticleSchema(blog) {
+      // Remove any existing article schema
+      const existing = document.getElementById('article-schema')
+      if (existing) existing.remove()
+
+      const image = this.getImageUrl(blog.image) || 'https://velasquezfuneral.com/images/funeral-blog.jpg'
+      const url   = `https://velasquezfuneral.com/blog/${blog.slug}`
+      const datePublished = blog.createdAt ? new Date(blog.createdAt).toISOString() : new Date().toISOString()
+      const dateModified  = blog.updatedAt ? new Date(blog.updatedAt).toISOString() : datePublished
+
+      const schema = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": blog.title,
+        "description": blog.excerpt || blog.title,
+        "image": image,
+        "url": url,
+        "datePublished": datePublished,
+        "dateModified": dateModified,
+        "author": {
+          "@type": "Organization",
+          "name": blog.publishedBy || "Velasquez Funeral and Chapel",
+          "url": "https://velasquezfuneral.com"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Velasquez Funeral and Chapel",
+          "url": "https://velasquezfuneral.com",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://velasquezfuneral.com/images/velasquez-funeral-logo.jpg"
+          }
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": url
+        }
+      }
+
+      const script = document.createElement('script')
+      script.id   = 'article-schema'
+      script.type = 'application/ld+json'
+      script.text = JSON.stringify(schema)
+      document.head.appendChild(script)
     },
 
     getImageUrl(url) {
